@@ -141,3 +141,12 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Dependencies
+node_modules/
+PresentationLayer/node_modules/
+
+# Environment variables — never push these
+.env
+.env.local
+.env.production
