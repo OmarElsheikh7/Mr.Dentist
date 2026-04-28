@@ -1,16 +1,15 @@
 const DoctorController = require("../Controllers/DoctorController");
 const express = require("express");
 const router = express.Router();
-const { isAdmin } = require("../Middleware/AuthMiddleware");
+const { isAdmin, protect } = require("../Middleware/AuthMiddleware");
 
 //Admin routes
-router.post("/",  DoctorController.createDoctor);
-router.delete("/:id",  DoctorController.deleteDoctor);
+router.post("/",protect,isAdmin, DoctorController.createDoctor);
+router.delete("/:id", protect, isAdmin, DoctorController.deleteDoctor);
 
 //Doctor routes
-router.put("/:id", DoctorController.updateDoctor);
+router.put("/:id", protect, DoctorController.updateDoctor);
 router.get("/", DoctorController.getAllDoctors);
 router.get("/:id", DoctorController.getDoctorById);
-
 
 module.exports = router;

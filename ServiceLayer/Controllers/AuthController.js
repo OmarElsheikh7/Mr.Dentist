@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const { generateToken } = require("../Helpers/AuthHelper");
 const UserRepository = require("../../DataAccessLayer/Repositories/UserRepository");
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
 const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRepository");
@@ -34,13 +35,12 @@ const register = async (req, res) => {
         user: user._id,
         phoneNumber: req.body.phoneNumber,
       });
-    }else if (role === "admin") {
+    } else if (role === "admin") {
       // Create admin data if needed
     }
     res
       .status(201)
       .json({ message: "User registered successfully", data: user });
-
   } catch (error) {
     res
       .status(500)
@@ -48,6 +48,25 @@ const register = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await UserRepository.findUserByEmail(email);
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+    const token = generateToken(user);
+    res.json({ message: "Login successful", token, data: user });
+  } catch (error) {
+    res.status(500).json({ message: "Error logging in", error: error.message });
+  }
+};
+
 module.exports = {
   register,
+  login,
 };

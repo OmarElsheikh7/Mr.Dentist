@@ -1,4 +1,3 @@
-const Doctor = require("../../DataAccessLayer/Models/Doctor");
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
 const bcrypt = require("bcrypt");
 
