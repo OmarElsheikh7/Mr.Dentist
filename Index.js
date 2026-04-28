@@ -6,6 +6,9 @@ const app = express();
 app.use(express.json());
 
 const authRoute = require("./ServiceLayer/Routes/AuthRoute");
+const doctorRoute = require("./ServiceLayer/Routes/DoctorRoute");
+
+app.use("/api/doctors", doctorRoute);
 app.use("/api/auth", authRoute);
 
 mongoose.connect(process.env.MONGO_URL)
