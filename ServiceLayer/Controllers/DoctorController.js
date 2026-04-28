@@ -70,10 +70,13 @@ const deleteDoctor = async (req, res) => {
 const getAllDoctors = async (req, res) => {
   try {
     const doctors = await DoctorRepository.getAllDoctors();
+
     if (doctors.length === 0) {
       return res.status(404).json({ message: "No doctors found" });
     }
+
     res.status(200).json({ message: "Doctors retrieved successfully", data: doctors });
+    
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
