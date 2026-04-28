@@ -37,11 +37,9 @@ const updateDoctor = async (req, res) => {
       description: req.body.description,
       shiftTiming: req.body.shiftTiming,
     };
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const userData = {
       name: req.body.name,
       email: req.body.email,
-      password: hashedPassword,
       dateofBirth: req.body.dateofBirth,
     };
     const doctor = await DoctorRepository.updateDoctor(
