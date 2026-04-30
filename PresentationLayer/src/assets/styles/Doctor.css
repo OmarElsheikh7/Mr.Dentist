@@ -1,0 +1,108 @@
+/* ===== DOCTORS PAGE ===== */
+.doctors-page {
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+.doctors-page .header {
+  background-color: #e9ecef;
+  padding: 40px 0;
+  margin-bottom: 0;
+}
+
+.doctors-page .header h1 {
+  font-size: 56px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.doctors-page .header p {
+  color: #85898c;
+  margin-bottom: 0;
+}
+
+.doctors-page .header span {
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* ===== MAIN SECTION ===== */
+.doctor-section {
+  padding: 60px 0;
+  background-color: #ffffff;
+}
+
+/* ===== DOCTOR IMAGE ===== */
+.doctor-image-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.doctor-image-wrapper img {
+  width: 100%;
+  max-width: 450px;
+  object-fit: cover;
+}
+
+/* ===== DOCTOR INFO ===== */
+.doctor-info {
+  padding: 20px 40px;
+}
+
+/* Name & Degree */
+.doctor-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 4px;
+}
+
+.doctor-name span {
+  font-size: 16px;
+  font-weight: 400;
+  color: #6c757d;
+  margin-left: 10px;
+}
+
+/* Specialty */
+.doctor-specialty {
+  color: #6c757d;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+
+
+
+/* ===== INFO ROWS ===== */
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.info-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a2e;
+  min-width: 130px;
+  padding-top: 2px;
+}
+
+.info-divider {
+  width: 2px;
+  min-height: 45px;
+  background-color: #ced4da;
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-size: 15px;
+  color: #6c757d;
+  line-height: 1.6;
+}

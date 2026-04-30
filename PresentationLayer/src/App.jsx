@@ -33,13 +33,12 @@ function App() {
           <Route path="/profile" element={
             <ProtectedRoute><ProfilePage /></ProtectedRoute>
           }/>
-          <Route path="/appointments" element={
-            <ProtectedRoute><AppointmentsPage /></ProtectedRoute>
-          }/>
-          <Route path="/doctors" element={
-            <ProtectedRoute><DoctorsPage /></ProtectedRoute>
-          }/>
 
+          <Route path="/appointments" element={<AppointmentsPage />} />
+
+
+          <Route path="/doctors" element={<DoctorsPage />} />
+ 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />

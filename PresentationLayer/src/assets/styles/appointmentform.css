@@ -1,0 +1,75 @@
+/* ===== APPOINTMENT PAGE ===== */
+.appointment-page {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 0;
+}
+
+/* ===== HEADER ===== */
+.appointment-page .header {
+  background-color: #e9ecef;
+  padding: 40px 0;
+  margin-bottom: 0 ;  
+}
+.appointment-page .header h1 {
+  font-size: 56px ;  
+  font-weight: 500 ; 
+  color: #1a1a2e ;
+  margin-bottom: 8px;
+}
+
+.appointment-page .header p {
+  color: #85898c;
+  margin-bottom: 0 ;
+}
+
+.appointment-page .header span {
+  color: #007bff;
+  cursor: pointer;
+}
+
+/* ===== FORM SECTION ===== */
+.appointment-page .form-section {
+  background: white ; 
+  padding: 40px 60px;
+  border-radius: 0 ;   
+  margin: 0 ;          
+  width: 100% ;       
+  min-height: calc(100vh - 160px);
+}
+
+/* ===== HEADINGS ===== */
+.appointment-page .form-section h2 {
+  font-size: 28px ;
+  font-weight: 700;   
+  color: #1a1a2e;
+  margin-bottom: 20px;
+}
+
+.appointment-page .form-section h3 {
+  font-size: 22px ;
+  font-weight: 700 ;
+  color: #1a1a2e;
+}
+
+/* ===== LABELS ===== */
+.appointment-page label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+  color: #555;
+}
+
+/* ===== INPUTS ===== */
+.appointment-page .form-control {
+  height: 45px;
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  width: 100%;
+}
+
+/* ===== BUTTON ===== */
+.appointment-page .btn-primary {
+  padding: 10px 25px;
+  font-size: 16px;
+}
