@@ -5,7 +5,7 @@ const AppointmentsPage = () => {
   return (
     <div className="appointment-page">
 
-      {/* ✅ Header */}
+      {/*  Header */}
       <div className="header">
         <div className="container">
           <h1>Appointment Form</h1>
@@ -13,7 +13,7 @@ const AppointmentsPage = () => {
         </div>
       </div>
 
-      {/* ✅ Form - Full width, no gap */}
+      {/* Form - Full width, no gap */}
       <div className="form-section">
         <div className="container">
           <h2>Make an Appointment</h2>

@@ -73,7 +73,7 @@ const DoctorList = () => {
           <div className="col-md-5">
             <div className="doctor-image-wrapper">
               <img
-                src="https://i.pinimg.com/1200x/32/c3/dd/32c3dda07789b98ea5363820a629f9f3.jpg"
+                src="https://i.pinimg.com/736x/18/35/eb/1835eb1fa62c5a4392798b2bde720450.jpg"
                 alt="Doctor 2"
                 style={{ width: "100%", maxWidth: "450px" }}
               />
@@ -86,7 +86,7 @@ const DoctorList = () => {
 
               {/* Name + Degree */}
               <h2 className="doctor-name">
-                Dr. Mahmoud
+                Dr. Enas
                 <span>M.D, pH.D</span>
               </h2>
 
