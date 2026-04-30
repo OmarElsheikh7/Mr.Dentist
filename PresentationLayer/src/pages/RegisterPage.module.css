@@ -1,0 +1,167 @@
+/* Full page background */
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f4f8;
+  padding: 40px 0;  /* extra padding so card doesn't touch edges */
+}
+
+/* White card in the center */
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 14px;
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Each input group */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputGroup label {
+  font-size: 14px;
+  color: #555;
+  font-weight: 600;
+}
+
+/* Input default state */
+.inputGroup input {
+  padding: 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  background-color: #fff;
+  transition: border 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+
+/* Input hover — cursor touches it */
+.inputGroup input:hover {
+  border-color: #4db8c8;
+  background-color: #f5feff;
+}
+
+/* Input focus — user clicks on it */
+.inputGroup input:focus {
+  border-color: #4db8c8;
+  background-color: #edfafc;
+  box-shadow: 0 0 0 3px rgba(77, 184, 200, 0.2);
+}
+
+/* Gender Dropdown default state */
+.select {
+  padding: 12px 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  background-color: #fff;
+  cursor: pointer;
+  appearance: auto; /* shows default dropdown arrow */
+  transition: border 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+
+/* Dropdown hover — cursor touches it */
+.select:hover {
+  border-color: #4db8c8;
+  background-color: #f5feff;
+}
+
+/* Dropdown focus — user clicks on it */
+.select:focus {
+  border-color: #4db8c8;
+  background-color: #edfafc;
+  box-shadow: 0 0 0 3px rgba(77, 184, 200, 0.2);
+}
+
+/* Register Button */
+.button {
+  background-color: #4db8c8;
+  color: white;
+  padding: 14px;
+  border: 2px solid #4db8c8;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  margin-top: 10px;
+}
+
+/* Button hover — cursor touches it */
+.button:hover {
+  background-color: white;
+  color: #4db8c8;
+  box-shadow: 0 4px 15px rgba(77, 184, 200, 0.4);
+}
+
+/* Button click — user presses it */
+.button:active {
+  background-color: #3aa0b0;
+  color: white;
+  transform: scale(0.98);
+}
+
+/* Error message */
+.error {
+  background-color: #ffe0e0;
+  color: #d00;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Login link at bottom */
+.loginText {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
+}
+
+.loginLink {
+  color: #4db8c8;
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+/* Link hover */
+.loginLink:hover {
+  color: #3aa0b0;
+  text-decoration: underline;
+}
