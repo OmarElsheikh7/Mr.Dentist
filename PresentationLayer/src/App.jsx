@@ -27,12 +27,10 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
 
           {/* Protected Routes */}
-          <Route path="/dashboard" element={
-            <ProtectedRoute><DashboardPage /></ProtectedRoute>
-          }/>
-          <Route path="/profile" element={
-            <ProtectedRoute><ProfilePage /></ProtectedRoute>
-          }/>
+          <Route path="/dashboard" element={<DashboardPage/>}/>
+
+        <Route path="/profile" element={<ProfilePage />} />
+          
           <Route path="/appointments" element={
             <ProtectedRoute><AppointmentsPage /></ProtectedRoute>
           }/>
