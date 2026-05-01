@@ -5,15 +5,15 @@ const DoctorsPage = () => {
   return (
     <div className="doctors-page">
 
-      {/* Header */}
+      {/* ===== Header ===== */}
       <div className="header">
         <div className="container">
-          <h1>Doctors</h1>
+          <h1>Our Doctors</h1>
           <p><span>Home</span> / Doctors</p>
         </div>
       </div>
 
-      {/* Doctor Component */}
+      {/* ===== Doctor List Component ===== */}
       <DoctorList />
 
     </div>
@@ -21,4 +21,3 @@ const DoctorsPage = () => {
 };
 
 export default DoctorsPage;
-
