@@ -12,7 +12,7 @@ import ProfilePage from './pages/ProfilePage'
 import AppointmentsPage from './pages/AppointmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
 import NotFoundPage from './pages/NotFoundPage'
-
+import LandingPage from './pages/LandingPage'
 
 
 function App() {
@@ -26,8 +26,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
-          {/* Protected Routes */}
-<<<<<<< HEAD
+          <Route path="/landing" element={<LandingPage />} />
+
           <Route path="/dashboard" element={<DashboardPage/>}/>
 
         <Route path="/profile" element={<ProfilePage />} />
@@ -37,13 +37,6 @@ function App() {
           }/>
           <Route path="/doctors" element={
             <ProtectedRoute><DoctorsPage /></ProtectedRoute>
-=======
-          <Route path="/dashboard" element={
-            <ProtectedRoute><DashboardPage /></ProtectedRoute>
-          }/>
-          <Route path="/profile" element={
-            <ProtectedRoute><ProfilePage /></ProtectedRoute>
->>>>>>> d2fd2d3f967dd909fbd2739eb301207860a8db76
           }/>
 
           <Route path="/appointments" element={<AppointmentsPage />} />
@@ -56,7 +49,7 @@ function App() {
         <Footer />
       </BrowserRouter>
     </AuthProvider>
-  )
+  )    
 }
 
 export default App

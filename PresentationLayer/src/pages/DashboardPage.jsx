@@ -1,9 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./DashboardPage.css";
 
 const DashboardPage = () => {
-  // Hardcoded for now - will come from backend later
+  const navigate = useNavigate();
+
+  // Hardcoded user — will come from AuthContext after login integration
   const user = { name: "John Doe" };
 
+  // Hardcoded appointments — will come from GET /api/appointments later
   const appointments = [
     {
       id: 1,
@@ -25,6 +30,7 @@ const DashboardPage = () => {
     },
   ];
 
+  // Hardcoded reviews — will come from GET /api/reviews later
   const reviews = [
     {
       id: 1,
@@ -36,49 +42,116 @@ const DashboardPage = () => {
   ];
 
   return (
-    <div>
-      <h1>Welcome, {user.name}!</h1>
+    <div className="dashboard">
 
-      {/* Appointments Section */}
-      <section>
-        <h2>My Appointments</h2>
-        {appointments.map((appt) => (
-          <div key={appt.id}>
-            <p>Doctor: {appt.doctor}</p>
-            <p>Specialty: {appt.specialty}</p>
-            <p>Date & Time: {appt.dateTime}</p>
-            <p>Branch: {appt.branch}</p>
-            <p>Total Cost: {appt.totalCost} EGP</p>
-            <p>Status: {appt.status}</p>
-            <hr />
+      {/* Welcome header with patient name and summary stats */}
+      <div className="dashboard-header">
+        <div>
+          <h1 className="dashboard-welcome">Welcome back, {user.name}!</h1>
+          <p className="dashboard-subtitle">Here is your health summary</p>
+        </div>
+
+        {/* Stat boxes showing total counts */}
+        <div className="dashboard-stats">
+          <div className="stat-box">
+            <span className="stat-number">{appointments.length}</span>
+            <span className="stat-label">Appointments</span>
           </div>
-        ))}
-      </section>
-
-      {/* Reviews Section */}
-      <section>
-        <h2>My Reviews</h2>
-        {reviews.map((review) => (
-          <div key={review.id}>
-            <p>Doctor: {review.doctor}</p>
-            <p>Rating: {review.rating} / 5</p>
-            <p>Comment: {review.comment}</p>
-            <p>Date: {review.createdAt}</p>
-            <hr />
+          <div className="stat-box">
+            <span className="stat-number">{reviews.length}</span>
+            <span className="stat-label">Reviews</span>
           </div>
-        ))}
-      </section>
+        </div>
+      </div>
 
-      {/* Quick Actions */}
-      <section>
-        <h2>Quick Actions</h2>
-        <button onClick={() => window.location.href = '/appointments'}>
-          Book Appointment
-        </button>
-        <button onClick={() => window.location.href = '/doctors'}>
-          View Doctors
-        </button>
-      </section>
+      {/* Quick action buttons for common tasks */}
+      <div className="dashboard-section">
+        <h2 className="section-title">Quick Actions</h2>
+        <div className="actions-row">
+
+          {/* Redirects to appointments booking page */}
+          <button
+            className="action-btn primary"
+            onClick={() => navigate("/appointments")}
+          >
+            Book Appointment
+          </button>
+
+          {/* Redirects to patient profile page */}
+          <button
+            className="action-btn secondary"
+            onClick={() => navigate("/profile")}
+          >
+            My Profile
+          </button>
+
+        </div>
+      </div>
+
+      {/* List of all patient appointments */}
+      <div className="dashboard-section">
+        <h2 className="section-title">My Appointments</h2>
+        <div className="cards-grid">
+
+          {/* Loop through each appointment and render a card */}
+          {appointments.map((appt) => (
+            <div className="card" key={appt.id}>
+
+              {/* Top row: doctor name and status badge */}
+              <div className="card-top">
+                <span className="card-title">{appt.doctor}</span>
+                <span className={`status-badge ${appt.status.toLowerCase()}`}>
+                  {appt.status}
+                </span>
+              </div>
+
+              {/* Appointment details */}
+              <p className="card-detail">Specialty: {appt.specialty}</p>
+              <p className="card-detail">Date: {appt.dateTime}</p>
+              <p className="card-detail">Branch: {appt.branch}</p>
+              <p className="card-detail">Cost: {appt.totalCost} EGP</p>
+
+              {/* Show review button only on completed appointments */}
+              {appt.status === "Completed" && (
+                <button
+                  className="review-btn"
+                  onClick={() => navigate("/reviews")}
+                >
+                  Write a review about this appointment
+                </button>
+              )}
+
+            </div>
+          ))}
+
+        </div>
+      </div>
+
+      {/* List of reviews the patient has written */}
+      <div className="dashboard-section">
+        <h2 className="section-title">My Reviews</h2>
+        <div className="cards-grid">
+
+          {/* Loop through each review and render a card */}
+          {reviews.map((review) => (
+            <div className="card" key={review.id}>
+
+              {/* Top row: doctor name and star rating */}
+              <div className="card-top">
+                <span className="card-title">{review.doctor}</span>
+                <span className="rating">{review.rating} / 5 stars</span>
+              </div>
+
+              {/* Review content */}
+              <p className="card-detail">"{review.comment}"</p>
+              <p className="card-detail">Date: {review.createdAt}</p>
+
+            </div>
+          ))}
+
+        </div>
+      </div>
+
     </div>
   );
 };
