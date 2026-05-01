@@ -27,6 +27,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
 
           {/* Protected Routes */}
+<<<<<<< HEAD
           <Route path="/dashboard" element={<DashboardPage/>}/>
 
         <Route path="/profile" element={<ProfilePage />} />
@@ -36,8 +37,20 @@ function App() {
           }/>
           <Route path="/doctors" element={
             <ProtectedRoute><DoctorsPage /></ProtectedRoute>
+=======
+          <Route path="/dashboard" element={
+            <ProtectedRoute><DashboardPage /></ProtectedRoute>
+          }/>
+          <Route path="/profile" element={
+            <ProtectedRoute><ProfilePage /></ProtectedRoute>
+>>>>>>> d2fd2d3f967dd909fbd2739eb301207860a8db76
           }/>
 
+          <Route path="/appointments" element={<AppointmentsPage />} />
+
+
+          <Route path="/doctors" element={<DoctorsPage />} />
+ 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
