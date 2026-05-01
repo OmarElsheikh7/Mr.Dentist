@@ -5,9 +5,13 @@ const timeSlots = [
 ];
 
 const AppointmentForm = () => {
+  
+  const handleSubmit = (e) => {
+    e.preventDefault(); // prevent page refresh
+    alert("✅ Your Appointment has been Booked Successfully!");
+  };
   return (
-    <form>
-
+    <form onSubmit={handleSubmit}> 
       {/* ===== Staff Section ===== */}
       <h3 className="mt-4 mb-3">Staff</h3>
       <div className="row">

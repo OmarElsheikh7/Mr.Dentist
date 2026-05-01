@@ -38,6 +38,10 @@ function App() {
 
 
           <Route path="/doctors" element={<DoctorsPage />} />
+
+
+          
+
  
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
