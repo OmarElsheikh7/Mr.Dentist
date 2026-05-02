@@ -3,7 +3,7 @@ import PatientDashboardPage from "./PatientDashboardPage";
 import DoctorDashboardPage from "./DoctorDashboardPage";
 
 const DashboardPage = () => {
-  const role = "Patient";  
+  const role = "doctor";  
 
   if (role === "doctor") return <DoctorDashboardPage />;
   return <PatientDashboardPage />;

@@ -13,6 +13,7 @@ import AppointmentsPage from './pages/AppointmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
 import NotFoundPage from './pages/NotFoundPage'
 import ReviewPage from './pages/ReviewPage'
+import LandingPage from './pages/LandingPage'
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
+          <Route path="/landing" element={<LandingPage />} />
           {/* Protected Routes */}
          
 

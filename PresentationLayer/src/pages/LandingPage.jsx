@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LandingPage.css";
-import projectLogo from '../pages/images/projectlogo.png';
+import projectLogo from '../pages/projectlogo.png';
 
 const services = [
   { id: 1, title: "General Dentistry", desc: "Routine checkups, cleanings, and fillings to keep your smile healthy." },
