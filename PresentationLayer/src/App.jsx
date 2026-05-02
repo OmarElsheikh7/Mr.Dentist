@@ -12,7 +12,7 @@ import ProfilePage from './pages/ProfilePage'
 import AppointmentsPage from './pages/AppointmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
 import NotFoundPage from './pages/NotFoundPage'
-
+import ReviewPage from './pages/ReviewPage'
 
 
 function App() {
@@ -27,6 +27,11 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
 
           {/* Protected Routes */}
+         
+
+
+
+          <Route path="/reviews" element={<ReviewPage />} />
 
           <Route path="/dashboard" element={<DashboardPage/>}/>
 

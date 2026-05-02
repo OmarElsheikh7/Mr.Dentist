@@ -1,0 +1,179 @@
+/* ===== REVIEW PAGE ===== */
+.review-page {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding-bottom: 0;
+}
+
+/* ===== HEADER ===== */
+/* Identical to appointment-page .header */
+.review-page .header {
+  background-color: #e9ecef;
+  padding: 40px 0;
+  margin-bottom: 0;
+}
+
+.review-page .header h1 {
+  font-size: 56px;
+  font-weight: 500;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.review-page .header p {
+  color: #85898c;
+  margin-bottom: 0;
+}
+
+.review-page .header span {
+  color: #3aa0b0;
+  cursor: pointer;
+}
+
+/* ===== FORM SECTION ===== */
+/* Identical to appointment-page .form-section */
+.review-page .form-section {
+  background: white;
+  padding: 40px 60px;
+  border-radius: 0;
+  margin: 0;
+  width: 100%;
+  min-height: calc(100vh - 160px);
+}
+
+/* ===== HEADINGS ===== */
+/* h2 — matches appointment-page h2 */
+.review-page .form-section h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin-bottom: 20px;
+}
+
+/* h3 — teal left border, matches appointment-page h3 */
+.review-page .form-section h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a2e;
+  border-left: 4px solid #3aa0b0;
+  padding-left: 10px;
+}
+
+/* ===== LABELS ===== */
+/* Matches appointment-page label */
+.review-page label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+  color: #555;
+}
+
+/* ===== INPUTS ===== */
+/* Matches appointment-page .form-control / .form-select */
+.review-page .form-control,
+.review-page .form-select {
+  height: 45px;
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  width: 100%;
+  font-size: 15px;
+}
+
+/* Textarea overrides fixed height since it is multi-line */
+.review-page textarea.form-control {
+  height: auto !important;
+  resize: vertical;
+}
+
+/* Teal focus ring — matches appointment-page */
+.review-page .form-control:focus,
+.review-page .form-select:focus {
+  border-color: #3aa0b0;
+  box-shadow: 0 0 0 3px rgba(58, 160, 176, 0.2);
+}
+
+/* ===== SUBTITLE under h2 ===== */
+.review-subtitle {
+  color: #85898c;
+  margin-top: -12px;
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+/* ===== INLINE REVIEW FORM ===== */
+/* Teal left border background block — like a sub-form */
+.review-inline-form {
+  background-color: #f9fbfc;
+  border-left: 4px solid #3aa0b0;
+  border-radius: 0 8px 8px 0;
+  padding: 20px 24px;
+  margin-bottom: 8px;
+  animation: slideDown 0.25s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ===== REVIEWED BADGE ===== */
+.badge-reviewed {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===== SUBMITTED REVIEW CARD ===== */
+.review-card {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  border-left: 4px solid #3aa0b0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  height: 100%;
+}
+
+/* Comment block inside review card */
+.review-card-comment {
+  font-size: 14px;
+  color: #444;
+  font-style: italic;
+  background: #f0f9fa;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin: 0;
+}
+
+/* Numeric rating badge at bottom of card */
+.review-rating-badge {
+  font-size: 13px;
+  font-weight: 700;
+  color: #065f46;
+  background: #d1fae5;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+/* ===== EMPTY STATE ===== */
+.review-empty-msg {
+  color: #85898c;
+  font-size: 15px;
+  padding: 24px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .review-page .header h1 {
+    font-size: 36px;
+  }
+
+  .review-page .form-section {
+    padding: 30px 20px;
+  }
+}
