@@ -1,0 +1,269 @@
+/* Variables — same as the rest of the project */
+:root {
+  --blue-dark:  #1a3a5c;
+  --blue-mid:   #2563a8;
+  --blue-light: #4a90d9;
+  --blue-pale:  #e8f0fb;
+  --grey-dark:  #2d3748;
+  --grey-mid:   #718096;
+  --grey-light: #f4f6f9;
+  --white:      #ffffff;
+  --shadow:     0 2px 12px rgba(37, 99, 168, 0.1);
+  --radius:     12px;
+}
+
+/* Outer page wrapper */
+.doctor-dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--grey-dark);
+  background: var(--grey-light);
+  min-height: 100vh;
+}
+
+/* Loading text shown while fetching */
+.doctor-loading {
+  text-align: center;
+  padding: 80px 24px;
+  font-size: 1rem;
+  color: var(--grey-mid);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ── Header ── */
+
+/* Top header bar with doctor info and stats */
+.doctor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: var(--blue-dark);
+  color: var(--white);
+  padding: 32px;
+  border-radius: var(--radius);
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+/* Small specialty tag above doctor name */
+.doctor-header-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.doctor-header-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.doctor-header-desc {
+  font-size: 0.9rem;
+  opacity: 0.7;
+  max-width: 420px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Row of stat boxes */
+.doctor-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Individual stat box */
+.stat-box {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 14px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 90px;
+}
+
+.stat-number {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  opacity: 0.75;
+}
+
+/* ── Sections ── */
+
+/* Wrapper for each content group */
+.doctor-section {
+  margin-bottom: 32px;
+}
+
+/* Section heading with bottom border */
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--blue-dark);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--blue-pale);
+}
+
+/* ── Quick Actions ── */
+
+.actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Filled blue button */
+.action-btn.primary {
+  background: var(--blue-mid);
+  color: var(--white);
+}
+.action-btn.primary:hover { background: var(--blue-dark); }
+
+/* ── Details Grid ── */
+
+/* Grid of shift, fee, and branch cards */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+/* Individual detail card */
+.detail-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border-top: 3px solid var(--blue-light);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.detail-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--grey-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.detail-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--blue-dark);
+}
+
+/* ── Cards Grid ── */
+
+/* Responsive grid for appointment and review cards */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* Individual card */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--blue-light);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Top row: title on left, badge or rating on right */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--blue-dark);
+}
+
+/* Small detail lines inside each card */
+.card-detail {
+  font-size: 0.9rem;
+  color: var(--grey-mid);
+  margin: 0;
+}
+
+/* Status badge — color depends on .upcoming or .completed */
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.status-badge.upcoming {
+  background: #dbeafe;
+  color: var(--blue-mid);
+}
+
+.status-badge.completed {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+/* Rating text in review cards */
+.rating {
+  font-size: 0.85rem;
+  color: var(--grey-mid);
+  font-weight: 600;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .doctor-header {
+    flex-direction: column;
+  }
+
+  .doctor-header-name { font-size: 1.4rem; }
+
+  .doctor-stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 480px) {
+  .actions-row { flex-direction: column; }
+  .action-btn { width: 100%; text-align: center; }
+}

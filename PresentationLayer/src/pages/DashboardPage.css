@@ -129,38 +129,7 @@
   gap: 16px;
 }
 
-/* Individual appointment or review card */
-.card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 20px;
-  box-shadow: var(--shadow);
-  border-left: 4px solid var(--blue-light);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
 
-/* Top row inside card: title on left, badge on right */
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.card-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--blue-dark);
-}
-
-/* Small text lines for details like date, branch, cost */
-.card-detail {
-  font-size: 0.9rem;
-  color: var(--grey-mid);
-  margin: 0;
-}
 
 /* Status badge — color changes based on .upcoming or .completed class */
 .status-badge {
@@ -178,13 +147,6 @@
 .status-badge.completed {
   background: #dcfce7;
   color: #16a34a;
-}
-
-/* Star rating text in review cards */
-.rating {
-  font-size: 0.85rem;
-  color: var(--grey-mid);
-  font-weight: 600;
 }
 
 /* Review button shown only on completed appointments */
