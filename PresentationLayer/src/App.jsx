@@ -12,7 +12,7 @@ import ProfilePage from './pages/ProfilePage'
 import AppointmentsPage from './pages/AppointmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
 import NotFoundPage from './pages/NotFoundPage'
-
+import ReviewPage from './pages/ReviewPage'
 
 
 function App() {
@@ -27,18 +27,21 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
 
           {/* Protected Routes */}
-          <Route path="/dashboard" element={
-            <ProtectedRoute><DashboardPage /></ProtectedRoute>
-          }/>
-          <Route path="/profile" element={
-            <ProtectedRoute><ProfilePage /></ProtectedRoute>
-          }/>
+         
+
+
+
+          <Route path="/reviews" element={<ReviewPage />} />
+
+          <Route path="/dashboard" element={<DashboardPage/>}/>
+
+        <Route path="/profile" element={<ProfilePage />} />
+          
 
           <Route path="/appointments" element={<AppointmentsPage />} />
 
-
           <Route path="/doctors" element={<DoctorsPage />} />
- 
+
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />

@@ -1,0 +1,189 @@
+/* Variables — change colors here to apply everywhere */
+:root {
+  --blue-dark:  #1a3a5c;
+  --blue-mid:   #2563a8;
+  --blue-light: #4a90d9;
+  --blue-pale:  #e8f0fb;
+  --grey-dark:  #2d3748;
+  --grey-mid:   #718096;
+  --grey-light: #f4f6f9;
+  --white:      #ffffff;
+  --shadow:     0 2px 12px rgba(37, 99, 168, 0.1);
+  --radius:     12px;
+}
+
+/* Outer page wrapper */
+.dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--grey-dark);
+  background: var(--grey-light);
+  min-height: 100vh;
+}
+
+/* Top header bar with welcome message and stats */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--blue-dark);
+  color: var(--white);
+  padding: 32px;
+  border-radius: var(--radius);
+  margin-bottom: 32px;
+}
+
+.dashboard-welcome {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+}
+
+.dashboard-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* Row of stat boxes inside the header */
+.dashboard-stats {
+  display: flex;
+  gap: 16px;
+}
+
+/* Individual stat box (appointments count, reviews count) */
+.stat-box {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 16px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+/* Section wrapper used for each group (actions, appointments, reviews) */
+.dashboard-section {
+  margin-bottom: 32px;
+}
+
+/* Section heading with bottom border */
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--blue-dark);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--blue-pale);
+}
+
+/* Row of quick action buttons */
+.actions-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Base style for action buttons */
+.action-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Filled blue button (primary action) */
+.action-btn.primary {
+  background: var(--blue-mid);
+  color: var(--white);
+}
+.action-btn.primary:hover { background: var(--blue-dark); }
+
+/* Outlined button (secondary action) */
+.action-btn.secondary {
+  background: var(--white);
+  color: var(--blue-mid);
+  border: 2px solid var(--blue-mid);
+}
+.action-btn.secondary:hover { background: var(--blue-pale); }
+
+/* Responsive grid — cards wrap automatically based on screen width */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+
+
+/* Status badge — color changes based on .upcoming or .completed class */
+.status-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.status-badge.upcoming {
+  background: #dbeafe;
+  color: var(--blue-mid);
+}
+
+.status-badge.completed {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+/* Review button shown only on completed appointments */
+.review-btn {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: var(--blue-pale);
+  color: var(--blue-mid);
+  border: 1px solid var(--blue-light);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.review-btn:hover {
+  background: var(--blue-mid);
+  color: var(--white);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .dashboard-welcome { font-size: 1.4rem; }
+
+  .actions-row {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

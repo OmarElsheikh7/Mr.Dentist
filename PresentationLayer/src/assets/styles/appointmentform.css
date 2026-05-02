@@ -9,18 +9,19 @@
 .appointment-page .header {
   background-color: #e9ecef;
   padding: 40px 0;
-  margin-bottom: 0 ;  
+  margin-bottom: 0;
 }
+
 .appointment-page .header h1 {
-  font-size: 56px ;  
-  font-weight: 500 ; 
-  color: #1a1a2e ;
+  font-size: 56px;
+  font-weight: 500;
+  color: #1a1a2e;
   margin-bottom: 8px;
 }
 
 .appointment-page .header p {
   color: #85898c;
-  margin-bottom: 0 ;
+  margin-bottom: 0;
 }
 
 .appointment-page .header span {
@@ -30,26 +31,28 @@
 
 /* ===== FORM SECTION ===== */
 .appointment-page .form-section {
-  background: white ; 
+  background: white;
   padding: 40px 60px;
-  border-radius: 0 ;   
-  margin: 0 ;          
-  width: 100% ;       
+  border-radius: 0;
+  margin: 0;
+  width: 100%;
   min-height: calc(100vh - 160px);
 }
 
 /* ===== HEADINGS ===== */
 .appointment-page .form-section h2 {
-  font-size: 28px ;
-  font-weight: 700;   
+  font-size: 28px;
+  font-weight: 700;
   color: #1a1a2e;
   margin-bottom: 20px;
 }
 
 .appointment-page .form-section h3 {
-  font-size: 22px ;
-  font-weight: 700 ;
+  font-size: 20px;
+  font-weight: 700;
   color: #1a1a2e;
+  border-left: 4px solid #3aa0b0; /* ✅ teal left border accent */
+  padding-left: 10px;
 }
 
 /* ===== LABELS ===== */
@@ -61,16 +64,64 @@
 }
 
 /* ===== INPUTS ===== */
-.appointment-page .form-control {
+.appointment-page .form-control,
+.appointment-page .form-select {
   height: 45px;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid #ced4da;
   width: 100%;
+  font-size: 15px;
 }
 
-/* ===== BUTTON ===== */
-.appointment-page .btn-primary {
-  padding: 10px 25px;
+.appointment-page .form-control:focus,
+.appointment-page .form-select:focus {
+  border-color: #3aa0b0;                      /* ✅ teal focus border */
+  box-shadow: 0 0 0 3px rgba(58, 160, 176, 0.2); /* ✅ teal glow */
+}
+
+/* ===== BOOK APPOINTMENT BUTTON ===== */
+.btn-book {
+  background-color: #3aa0b0 !important;
+  border: none !important;
+  color: #ffffff !important;
+  padding: 12px 30px !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.btn-book:hover {
+  background-color: #2e8a99 !important;
+  color: #ffffff !important;
+}
+/* ===== SUCCESS STATE ===== */
+
+/* Teal circle behind the checkmark icon */
+.success-icon-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #e6f7f9;
+  border: 3px solid #3aa0b0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main success heading */
+.success-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+/* Subtitle text under heading */
+.success-subtitle {
   font-size: 16px;
-  background-color: #3aa0b0;
+  color: #85898c;
+  line-height: 1.8;
 }

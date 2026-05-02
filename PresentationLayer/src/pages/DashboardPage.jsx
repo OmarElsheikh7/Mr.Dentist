@@ -1,5 +1,12 @@
-// DashboardPage.jsx
+import React from "react";
+import PatientDashboardPage from "./PatientDashboardPage";
+import DoctorDashboardPage from "./DoctorDashboardPage";
+
 const DashboardPage = () => {
-  return <div><h1>Dashboard Page</h1></div>
-}
-export default DashboardPage
+  const role = "doctor";  
+
+  if (role === "doctor") return <DoctorDashboardPage />;
+  return <PatientDashboardPage />;
+};
+
+export default DashboardPage;
