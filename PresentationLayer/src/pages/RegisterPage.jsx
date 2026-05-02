@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
-import styles from './RegisterPage.module.css'
+import styles from "../assets/styles/RegisterPage.module.css";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({

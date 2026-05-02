@@ -5,21 +5,21 @@ const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRep
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, role, dateofBirth } = req.body;
 
-    const existingUser = await UserRepository.findUserByEmail(email);
+    const existingUser = await UserRepository.findUserByEmail(req.body.email);
     if (existingUser) {
       return res.status(400).json({ message: "Email already in use" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
     const user = await UserRepository.createUser({
-      name,
-      email,
+      name: req.body.name,
+      email: req.body.email,
       password: hashedPassword,
       role: "patient",
-      dateofBirth,
+      dateofBirth: req.body.dateofBirth,
+      gender: req.body.gender,
     });
     await PatientRepository.createPatient({
       user: user._id,
@@ -58,7 +58,20 @@ const login = async (req, res) => {
   }
 };
 
+const getProfile = async (req, res) => {
+  try {
+    const user = await UserRepository.findUserById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ data: user });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching profile", error: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
+  getProfile
 };
