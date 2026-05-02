@@ -1,49 +1,89 @@
 import React, { useState } from "react";
 
 const ProfileForm = ({ user, onUpdate }) => {
+  // Guard: do not render if user data is not available yet
   if (!user) return null;
 
+  // Local state for each editable field — pre-filled with current user data
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [dateOfBirth, setDateOfBirth] = useState(user.dateOfBirth);
   const [phone, setPhone] = useState(user.phone);
 
+  // Called when patient clicks Save — sends updated data up to ProfilePage
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Pass updated fields back to ProfilePage, keep role unchanged
     onUpdate({ name, email, dateOfBirth, phone, role: user.role });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Edit Profile</h2>
+    <form className="profile-form" onSubmit={handleSubmit}>
 
-      <div>
-        <label>Name:</label>
-        <input value={name} onChange={(e) => setName(e.target.value)} type="text" />
+      <h2 className="form-heading">Edit Profile</h2>
+
+      {/* Name field */}
+      <div className="form-group">
+        <label className="form-label">Name</label>
+        <input
+          className="form-input"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
 
-      <div>
-        <label>Email:</label>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
+      {/* Email field */}
+      <div className="form-group">
+        <label className="form-label">Email</label>
+        <input
+          className="form-input"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </div>
 
-      <div>
-        <label>Date of Birth:</label>
-        <input value={dateOfBirth} onChange={(e) => setDateOfBirth(e.target.value)} type="date" />
+      {/* Date of birth field */}
+      <div className="form-group">
+        <label className="form-label">Date of Birth</label>
+        <input
+          className="form-input"
+          type="date"
+          value={dateOfBirth}
+          onChange={(e) => setDateOfBirth(e.target.value)}
+        />
       </div>
 
-      <div>
-        <label>Phone:</label>
-        <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" />
+      {/* Phone field */}
+      <div className="form-group">
+        <label className="form-label">Phone</label>
+        <input
+          className="form-input"
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
       </div>
 
-      {/* Role is read-only - patient can't change their role */}
-      <div>
-        <label>Role:</label>
-        <input value={user.role} type="text" disabled />
+      {/* Role field — disabled because patient cannot change their role */}
+      <div className="form-group">
+        <label className="form-label">Role</label>
+        <input
+          className="form-input disabled"
+          type="text"
+          value={user.role}
+          disabled
+        />
+        <span className="form-hint">Role cannot be changed</span>
       </div>
 
-      <button type="submit">Save Changes</button>
+      {/* Submit button */}
+      <button className="form-submit" type="submit">
+        Save Changes
+      </button>
+
     </form>
   );
 };
