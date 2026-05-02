@@ -5,6 +5,11 @@ const createPatient = async (patientData) => {
   return await patient.save();
 };
 
+const findPatientByUserId = async (userId) => {
+  return await Patient.findOne({ user: userId }).populate("user");
+};
+
 module.exports = {
   createPatient,
+  findPatientByUserId,
 };

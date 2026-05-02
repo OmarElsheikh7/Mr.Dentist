@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const { generateToken } = require("../Helpers/AuthHelper");
 const UserRepository = require("../../DataAccessLayer/Repositories/UserRepository");
 const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRepository");
+const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
 
 const register = async (req, res) => {
   try {
@@ -64,11 +65,28 @@ const getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json({ data: user });
+
+    if(user.role === "patient") {
+      const patient = await PatientRepository.findPatientByUserId(user._id);
+      return res.json({ message: "Profile fetched successfully", data: { ...user.toObject(), phoneNumber: patient.phoneNumber } });
+    }
+
+    else if(user.role === "doctor") {
+      const doctor = await DoctorRepository.findDoctorByUserId(user._id);
+      return res.json({ message: "Profile fetched successfully",
+         data: { ...user.toObject(), specialty: doctor.specialty, consultationFee: doctor.consultationFee, description: doctor.description, shiftTiming: doctor.shiftTiming } });
+    }
+
+    else {
+      return res.json({ message: "Profile fetched successfully", data: user });
+    }
+
   } catch (error) {
     res.status(500).json({ message: "Error fetching profile", error: error.message });
   }
 };
+
+
 
 module.exports = {
   register,
