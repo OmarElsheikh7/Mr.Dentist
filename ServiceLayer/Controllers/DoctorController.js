@@ -14,6 +14,7 @@ const createDoctor = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
+      gender: req.body.gender,
       role: "doctor",
       dateofBirth: req.body.dateofBirth,
     };
@@ -40,6 +41,7 @@ const updateDoctor = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       dateofBirth: req.body.dateofBirth,
+      gender: req.body.gender,
     };
     const doctor = await DoctorRepository.updateDoctor(
       doctorId,
