@@ -21,8 +21,8 @@ const updateDoctor = async (doctorId, doctorData ,userData) => {
   }
   await UserRepository.updateUser(doctor.user, userData);
 
-  return await Doctor.findByIdAndUpdate(doctorId, doctorData, {new: true,}).populate("user");
-
+  await doctor.updateOne(doctorData, {new: true,}).populate("user");
+  return doctor.populate("user");
 };
 
 const deleteDoctor = async (doctorId) => {
@@ -33,7 +33,7 @@ const deleteDoctor = async (doctorId) => {
   }
   await UserRepository.deleteUser(doctor.user);
 
-  return await Doctor.findByIdAndDelete(doctorId);
+  return await doctor.deleteOne();
 };
 
 const findDoctorByUserId = async (userId) => {
