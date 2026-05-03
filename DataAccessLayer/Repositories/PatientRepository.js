@@ -32,9 +32,14 @@ const findPatientByUserId = async (userId) => {
   return await Patient.findOne({ user: userId }).populate("user");
 };
 
+const findPatientById = async (patientId) => {
+  return await Patient.findById(patientId).populate("user");
+};
+
 module.exports = {
   createPatient,
   findPatientByUserId,
+  findPatientById,
   updatePatient,
   deletePatient
 };

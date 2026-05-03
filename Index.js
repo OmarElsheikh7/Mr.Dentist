@@ -9,7 +9,9 @@ app.use(cors());
 
 const authRoute = require("./ServiceLayer/Routes/AuthRoute");
 const doctorRoute = require("./ServiceLayer/Routes/DoctorRoute");
+const reviewRoute = require("./ServiceLayer/Routes/ReviewRoute");
 
+app.use("/api/reviews", reviewRoute);
 app.use("/api/doctors", doctorRoute);
 app.use("/api/auth", authRoute);
 

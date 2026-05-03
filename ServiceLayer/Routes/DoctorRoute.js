@@ -9,6 +9,7 @@ router.delete("/:id", protect, authorizeRoles("admin"), DoctorController.deleteD
 
 //Doctor routes
 router.put("/:id", protect,authorizeRoles("doctor","admin"), DoctorController.updateDoctor);
+router.get("/reviews", protect, authorizeRoles("doctor"), DoctorController.getDoctorReviews);
 router.get("/", DoctorController.getAllDoctors);
 router.get("/:id", DoctorController.getDoctorById);
 
