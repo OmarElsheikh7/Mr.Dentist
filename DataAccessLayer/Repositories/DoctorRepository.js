@@ -10,7 +10,8 @@ const createDoctorWithUser = async (doctorData, userData) => {
   const user = await UserRepository.createUser(userData);
   doctorData.user = user._id;
   const doctor = new Doctor(doctorData);
-  return await doctor.save();
+  await doctor.save();
+  return doctor.populate("user");
 };
 
 const updateDoctor = async (doctorId, doctorData ,userData) => {

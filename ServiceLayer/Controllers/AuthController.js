@@ -87,9 +87,68 @@ const getProfile = async (req, res) => {
 };
 
 
+const updateProfile = async (req, res) => {
+  try {
+
+    const userId = req.user.id;
+    const userData = {
+      name: req.body.name,
+      email: req.body.email,
+      dateofBirth: req.body.dateofBirth,
+    };
+
+    if (req.user.role === "patient") {
+      const patient = await PatientRepository.findPatientByUserId(userId);
+      if (!patient) {
+        return res.status(404).json({ message: "Patient not found" });
+      }
+      const patientData = {
+        phoneNumber: req.body.phoneNumber,
+      };
+
+      const updatedPatient = await PatientRepository.updatePatient(
+        patient._id,
+        patientData,
+        userData,
+      );
+      return res.json({
+        message: "Profile updated successfully",
+        data: patient,
+      });
+    } 
+    else if (req.user.role === "doctor") {
+      const doctor = await DoctorRepository.findDoctorByUserId(userId);
+      if (!doctor) {
+        return res.status(404).json({ message: "Doctor not found" });
+      }
+      const doctorData = {
+        specialty: req.body.specialty,
+        consultationFee: req.body.consultationFee,
+        description: req.body.description,
+        shiftTiming: req.body.shiftTiming,
+      };
+      const updatedDoctor = await DoctorRepository.updateDoctor(
+        doctor._id,
+        doctorData,
+        userData,
+      );
+      return res.json({
+        message: "Profile updated successfully",
+        data: doctor,
+      });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating profile", error: error.message });
+  }
+};
+
+
 
 module.exports = {
   register,
   login,
-  getProfile
+  getProfile,
+  updateProfile
 };

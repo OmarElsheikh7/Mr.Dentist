@@ -6,6 +6,14 @@ const createPatient = async (patientData) => {
   return await patient.save();
 };
 
+const createPatientWithUser = async (patientData, userData) => {
+  const user = await UserRepository.createUser(userData);
+  patientData.user = user._id;
+  const patient = new Patient(patientData);
+  await patient.save();
+  return patient.populate("user");
+};
+
 const updatePatient = async (patientId, patientData,userData) => {
   const patient = await Patient.findById(patientId);
   if (!patient) {
@@ -41,5 +49,6 @@ module.exports = {
   findPatientByUserId,
   findPatientById,
   updatePatient,
+  createPatientWithUser,
   deletePatient
 };
