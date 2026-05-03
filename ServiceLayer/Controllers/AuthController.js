@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const { generateToken } = require("../Helpers/AuthHelper");
 const UserRepository = require("../../DataAccessLayer/Repositories/UserRepository");
 const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRepository");
+const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
 
 const register = async (req, res) => {
   try {
@@ -64,14 +65,90 @@ const getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json({ data: user });
+
+    if(user.role === "patient") {
+      const patient = await PatientRepository.findPatientByUserId(user._id);
+      return res.json({ message: "Profile fetched successfully", data: { ...user.toObject(), phoneNumber: patient.phoneNumber } });
+    }
+
+    else if(user.role === "doctor") {
+      const doctor = await DoctorRepository.findDoctorByUserId(user._id);
+      return res.json({ message: "Profile fetched successfully",
+         data: { ...user.toObject(), specialty: doctor.specialty, consultationFee: doctor.consultationFee, description: doctor.description, shiftTiming: doctor.shiftTiming } });
+    }
+
+    else {
+      return res.json({ message: "Profile fetched successfully", data: user });
+    }
+
   } catch (error) {
     res.status(500).json({ message: "Error fetching profile", error: error.message });
   }
 };
 
+
+const updateProfile = async (req, res) => {
+  try {
+
+    const userId = req.user.id;
+    const userData = {
+      name: req.body.name,
+      email: req.body.email,
+      dateofBirth: req.body.dateofBirth,
+    };
+
+    if (req.user.role === "patient") {
+      const patient = await PatientRepository.findPatientByUserId(userId);
+      if (!patient) {
+        return res.status(404).json({ message: "Patient not found" });
+      }
+      const patientData = {
+        phoneNumber: req.body.phoneNumber,
+      };
+
+      const updatedPatient = await PatientRepository.updatePatient(
+        patient._id,
+        patientData,
+        userData,
+      );
+      return res.json({
+        message: "Profile updated successfully",
+        data: patient,
+      });
+    } 
+    else if (req.user.role === "doctor") {
+      const doctor = await DoctorRepository.findDoctorByUserId(userId);
+      if (!doctor) {
+        return res.status(404).json({ message: "Doctor not found" });
+      }
+      const doctorData = {
+        specialty: req.body.specialty,
+        consultationFee: req.body.consultationFee,
+        description: req.body.description,
+        shiftTiming: req.body.shiftTiming,
+      };
+      const updatedDoctor = await DoctorRepository.updateDoctor(
+        doctor._id,
+        doctorData,
+        userData,
+      );
+      return res.json({
+        message: "Profile updated successfully",
+        data: doctor,
+      });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error updating profile", error: error.message });
+  }
+};
+
+
+
 module.exports = {
   register,
   login,
-  getProfile
+  getProfile,
+  updateProfile
 };

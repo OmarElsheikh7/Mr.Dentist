@@ -14,14 +14,19 @@ const protect = (req, res, next) => {
   }
 };
 
-const isAdmin = (req, res, next) => {
-  if (req.user.role !== "admin") {
-    return res.status(403).json({ message: "Access denied. Admins only." });
-  }
-  next();
+const authorizeRoles = (...allowedRoles) => {
+  return (req, res, next) => {
+
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ 
+        message: `Access denied. Users with the '${req.user.role}' role cannot perform this action.` 
+      });
+    }
+    next();
+  };
 };
 
 module.exports = {
   protect,
-  isAdmin,
+  authorizeRoles
 };

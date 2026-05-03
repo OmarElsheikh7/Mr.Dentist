@@ -10,7 +10,8 @@ const createDoctorWithUser = async (doctorData, userData) => {
   const user = await UserRepository.createUser(userData);
   doctorData.user = user._id;
   const doctor = new Doctor(doctorData);
-  return await doctor.save();
+  await doctor.save();
+  return doctor.populate("user");
 };
 
 const updateDoctor = async (doctorId, doctorData ,userData) => {
@@ -21,8 +22,8 @@ const updateDoctor = async (doctorId, doctorData ,userData) => {
   }
   await UserRepository.updateUser(doctor.user, userData);
 
-  return await Doctor.findByIdAndUpdate(doctorId, doctorData, {new: true,}).populate("user");
-
+  await doctor.updateOne(doctorData, {new: true,}).populate("user");
+  return doctor.populate("user");
 };
 
 const deleteDoctor = async (doctorId) => {
@@ -33,7 +34,7 @@ const deleteDoctor = async (doctorId) => {
   }
   await UserRepository.deleteUser(doctor.user);
 
-  return await Doctor.findByIdAndDelete(doctorId);
+  return await doctor.deleteOne();
 };
 
 const findDoctorByUserId = async (userId) => {

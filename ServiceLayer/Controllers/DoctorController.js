@@ -1,4 +1,5 @@
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
+const ReviewRepository = require("../../DataAccessLayer/Repositories/ReviewRepository");
 const bcrypt = require("bcrypt");
 
 const createDoctor = async (req, res) => {
@@ -99,10 +100,35 @@ const getDoctorById = async (req, res) => {
   }
 };
 
+const getDoctorReviews = async (req, res) => {
+  try {
+    const doctor = await DoctorRepository.findDoctorByUserId(req.user.id);
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found for this user" });
+    }
+    const doctorId = doctor._id;
+    const reviews = await ReviewRepository.getReviewsByDoctorId(doctorId);
+    const cleanedReviews = reviews.map((review) => {
+
+            const plainReview = review.toObject(); 
+            const { patient, ...ReviewData } = plainReview;
+
+            return {
+                ...ReviewData,
+                patientName: patient?.user?.name || "Unknown"
+            };
+        });
+    res.status(200).json({ message: "Doctor's reviews retrieved successfully", data: cleanedReviews });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createDoctor,
   updateDoctor,
   deleteDoctor,
   getAllDoctors,
   getDoctorById,
+  getDoctorReviews
 };
