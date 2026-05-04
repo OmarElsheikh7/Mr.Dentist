@@ -122,10 +122,7 @@ const updateProfile = async (req, res) => {
         return res.status(404).json({ message: "Doctor not found" });
       }
       const doctorData = {
-        specialty: req.body.specialty,
-        consultationFee: req.body.consultationFee,
         description: req.body.description,
-        shiftTiming: req.body.shiftTiming,
       };
       const updatedDoctor = await DoctorRepository.updateDoctor(
         doctor._id,
