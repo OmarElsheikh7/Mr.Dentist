@@ -27,22 +27,15 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/landing" element={<LandingPage />} />
+
+
           {/* Protected Routes */}
          
-
-
-
           <Route path="/reviews" element={<ReviewPage />} />
-
           <Route path="/dashboard" element={<DashboardPage/>}/>
-
-        <Route path="/profile" element={<ProfilePage />} />
-          
-
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
-
           <Route path="/doctors" element={<DoctorsPage />} />
-
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />
