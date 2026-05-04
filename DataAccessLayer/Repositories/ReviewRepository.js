@@ -4,9 +4,6 @@ const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRep
 
 const createReview = async (patientId, doctorId, reviewData) => {
   
-    if (await hadReviewed(patientId, doctorId)) {
-        throw new Error("You have already reviewed this doctor");
-    }
     const review = new Review({
         doctor: doctorId,
         patient: patientId,

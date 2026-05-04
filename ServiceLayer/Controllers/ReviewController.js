@@ -15,10 +15,16 @@ const createReview = async (req, res) => {
         if (!doctorId) {
             return res.status(400).json({ message: "Doctor ID is required" });
         }
+
+        if (await ReviewRepository.hadReviewed(patientId, doctorId)) {
+            return res.status(400).json({ message: "You have already reviewed this doctor" });
+        }
+
         const reviewData = {
             rating: req.body.rating,
             comment: req.body.comment,
         };
+        
         const review = await ReviewRepository.createReview(patientId, doctorId, reviewData);
         res.status(201).json({ message: "Review created successfully", data: review });
     } 

@@ -113,7 +113,7 @@ const updateProfile = async (req, res) => {
       );
       return res.json({
         message: "Profile updated successfully",
-        data: patient,
+        data: updatedPatient,
       });
     } 
     else if (req.user.role === "doctor") {
@@ -131,7 +131,7 @@ const updateProfile = async (req, res) => {
       );
       return res.json({
         message: "Profile updated successfully",
-        data: doctor,
+        data: updatedDoctor,
       });
     }
   } catch (error) {

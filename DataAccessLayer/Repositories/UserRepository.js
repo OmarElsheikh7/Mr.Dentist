@@ -1,16 +1,16 @@
 const User = require("../Models/User");
 
-const createUser = async (userData) => {
+const createUser = async (userData, options = {}) => {
   const user = new User(userData);
-  return await user.save();
+  return await user.save(options);
 };
 
-const updateUser = async (userId, userData) => {
-  return await User.findByIdAndUpdate(userId, userData, { new: true });
+const updateUser = async (userId, userData, options = {}) => {
+  return await User.findByIdAndUpdate(userId, userData, { new: true, ...options });
 };
 
-const deleteUser = async (userId) => {
-  return await User.findByIdAndDelete(userId);
+const deleteUser = async (userId, options = {}) => {
+  return await User.findByIdAndDelete(userId, options);
 };
 
 const findUserByEmail = async (email) => {
