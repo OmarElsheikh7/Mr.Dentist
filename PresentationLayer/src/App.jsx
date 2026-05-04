@@ -5,15 +5,16 @@ import Navbar from './components/common/Navbar'
 import Footer from './components/common/Footer'
 import ProtectedRoute from './components/common/ProtectedRoute'
 
+import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import DashboardPage from './pages/DashboardPage'
 import ProfilePage from './pages/ProfilePage'
+import DoctorProfilePage from "./pages/DoctorProfilePage";
 import AppointmentsPage from './pages/AppointmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
-import NotFoundPage from './pages/NotFoundPage'
 import ReviewPage from './pages/ReviewPage'
-import LandingPage from './pages/LandingPage'
+import NotFoundPage from './pages/NotFoundPage'
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/doctors" element={<DoctorsPage />} />
+          <Route path="/doctor/profile" element={<DoctorProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Footer />

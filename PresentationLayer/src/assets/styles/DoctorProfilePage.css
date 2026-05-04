@@ -1,0 +1,270 @@
+/* Uses the same design tokens as ProfilePage.css for full consistency */
+
+:root {
+  --blue-dark:  #1a3a5c;
+  --blue-mid:   #2563a8;
+  --blue-light: #4a90d9;
+  --blue-pale:  #e8f0fb;
+  --grey-dark:  #2d3748;
+  --grey-mid:   #718096;
+  --grey-light: #f4f6f9;
+  --white:      #ffffff;
+  --shadow:     0 2px 12px rgba(37, 99, 168, 0.1);
+  --radius:     12px;
+}
+
+
+.profile-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--grey-dark);
+  min-height: 100vh;
+  background: var(--grey-light);
+}
+
+.profile-heading {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  margin-bottom: 24px;
+}
+
+.profile-loading {
+  text-align: center;
+  padding: 80px 24px;
+  font-size: 1rem;
+  color: var(--grey-mid);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+.profile-success {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+
+.profile-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--blue-mid);
+  color: var(--white);
+  font-size: 2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  /* Remove and replace with <img> when photo upload is added */
+}
+
+.profile-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.profile-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  margin: 0;
+}
+
+.profile-role-badge {
+  background: var(--blue-pale);
+  color: var(--blue-mid);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--blue-pale);
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.profile-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--grey-mid);
+}
+
+.profile-value {
+  font-size: 0.95rem;
+  color: var(--grey-dark);
+  font-weight: 500;
+}
+
+/* Description row — text can be long so we allow wrapping */
+.profile-row.profile-row--description {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.profile-value--description {
+  font-size: 0.92rem;
+  color: var(--grey-mid);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Shift timing badge — styled differently to stand out */
+.profile-shift-badge {
+  background: var(--blue-pale);
+  color: var(--blue-dark);
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* ── Edit Toggle Button ── */
+
+.profile-edit-toggle {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  background: var(--blue-mid);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background 0.2s ease;
+}
+
+.profile-edit-toggle:hover {
+  background: var(--blue-dark);
+}
+
+/* ── Doctor Profile Form ── */
+
+.profile-form {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--shadow);
+}
+
+.form-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  margin-bottom: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--grey-mid);
+}
+
+.form-input {
+  padding: 11px 14px;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--grey-dark);
+  font-family: 'Segoe UI', sans-serif;
+  transition: border-color 0.2s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--blue-mid);
+}
+
+/* Textarea inherits form-input styles but adds resize control */
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-input.disabled {
+  background: var(--grey-light);
+  color: var(--grey-mid);
+  cursor: not-allowed;
+}
+
+.form-hint {
+  font-size: 0.78rem;
+  color: var(--grey-mid);
+}
+
+.form-submit {
+  width: 100%;
+  padding: 13px;
+  background: var(--blue-mid);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s ease;
+}
+
+.form-submit:hover {
+  background: var(--blue-dark);
+}
+
+
+
+@media (max-width: 600px) {
+  .profile-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

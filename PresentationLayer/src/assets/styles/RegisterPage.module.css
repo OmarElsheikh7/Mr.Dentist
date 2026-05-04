@@ -4,16 +4,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f0f4f8;
-  padding: 40px 0;  /* extra padding so card doesn't touch edges */
+  background-color: #f4f6f9; /* --grey-light */
+  padding: 40px 0; /* extra padding so card doesn't touch edges */
 }
 
 /* White card in the center */
 .card {
-  background: white;
+  background: #ffffff; /* --white */
   padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px; /* --radius */
+  box-shadow: 0 2px 12px rgba(37, 99, 168, 0.1); /* --shadow */
   width: 100%;
   max-width: 420px;
 }
@@ -26,12 +26,12 @@
 
 .title {
   font-size: 28px;
-  color: #333;
+  color: #1a3a5c; /* --blue-dark */
   margin-bottom: 8px;
 }
 
 .subtitle {
-  color: #888;
+  color: #718096; /* --grey-mid */
   font-size: 14px;
 }
 
@@ -51,42 +51,46 @@
 
 .inputGroup label {
   font-size: 14px;
-  color: #555;
+  color: #718096; /* --grey-mid */
   font-weight: 600;
 }
 
 /* Input default state */
 .inputGroup input {
   padding: 12px 16px;
-  border: 2px solid #ddd;
+  border: 1px solid #cbd5e0;
   border-radius: 8px;
   font-size: 15px;
   outline: none;
-  background-color: #fff;
+  background-color: #ffffff; /* --white */
+  font-family: 'Segoe UI', sans-serif;
+  color: #2d3748; /* --grey-dark */
   transition: border 0.3s, background-color 0.3s, box-shadow 0.3s;
 }
 
 /* Input hover — cursor touches it */
 .inputGroup input:hover {
-  border-color: #4db8c8;
-  background-color: #f5feff;
+  border-color: #4a90d9; /* --blue-light */
+  background-color: #e8f0fb; /* --blue-pale */
 }
 
 /* Input focus — user clicks on it */
 .inputGroup input:focus {
-  border-color: #4db8c8;
-  background-color: #edfafc;
-  box-shadow: 0 0 0 3px rgba(77, 184, 200, 0.2);
+  border-color: #2563a8; /* --blue-mid */
+  background-color: #e8f0fb; /* --blue-pale */
+  box-shadow: 0 0 0 3px rgba(37, 99, 168, 0.15);
 }
 
 /* Gender Dropdown default state */
 .select {
   padding: 12px 16px;
-  border: 2px solid #ddd;
+  border: 1px solid #cbd5e0;
   border-radius: 8px;
   font-size: 15px;
   outline: none;
-  background-color: #fff;
+  background-color: #ffffff; /* --white */
+  font-family: 'Segoe UI', sans-serif;
+  color: #2d3748; /* --grey-dark */
   cursor: pointer;
   appearance: auto; /* shows default dropdown arrow */
   transition: border 0.3s, background-color 0.3s, box-shadow 0.3s;
@@ -94,26 +98,27 @@
 
 /* Dropdown hover — cursor touches it */
 .select:hover {
-  border-color: #4db8c8;
-  background-color: #f5feff;
+  border-color: #4a90d9; /* --blue-light */
+  background-color: #e8f0fb; /* --blue-pale */
 }
 
 /* Dropdown focus — user clicks on it */
 .select:focus {
-  border-color: #4db8c8;
-  background-color: #edfafc;
-  box-shadow: 0 0 0 3px rgba(77, 184, 200, 0.2);
+  border-color: #2563a8; /* --blue-mid */
+  background-color: #e8f0fb; /* --blue-pale */
+  box-shadow: 0 0 0 3px rgba(37, 99, 168, 0.15);
 }
 
 /* Register Button */
 .button {
-  background-color: #4db8c8;
-  color: white;
+  background-color: #2563a8; /* --blue-mid */
+  color: #ffffff; /* --white */
   padding: 14px;
-  border: 2px solid #4db8c8;
+  border: 2px solid #2563a8; /* --blue-mid */
   border-radius: 8px;
   font-size: 16px;
   font-weight: bold;
+  font-family: 'Segoe UI', sans-serif;
   cursor: pointer;
   letter-spacing: 1px;
   transition: background 0.3s, color 0.3s, box-shadow 0.3s;
@@ -122,15 +127,15 @@
 
 /* Button hover — cursor touches it */
 .button:hover {
-  background-color: white;
-  color: #4db8c8;
-  box-shadow: 0 4px 15px rgba(77, 184, 200, 0.4);
+  background-color: #1a3a5c; /* --blue-dark */
+  border-color: #1a3a5c; /* --blue-dark */
+  box-shadow: 0 2px 12px rgba(37, 99, 168, 0.1); /* --shadow */
 }
 
 /* Button click — user presses it */
 .button:active {
-  background-color: #3aa0b0;
-  color: white;
+  background-color: #1a3a5c; /* --blue-dark */
+  color: #ffffff; /* --white */
   transform: scale(0.98);
 }
 
@@ -150,11 +155,11 @@
   text-align: center;
   margin-top: 20px;
   font-size: 14px;
-  color: #888;
+  color: #718096; /* --grey-mid */
 }
 
 .loginLink {
-  color: #4db8c8;
+  color: #2563a8; /* --blue-mid */
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s;
@@ -162,6 +167,6 @@
 
 /* Link hover */
 .loginLink:hover {
-  color: #3aa0b0;
+  color: #1a3a5c; /* --blue-dark */
   text-decoration: underline;
 }

@@ -146,7 +146,7 @@ const DoctorDashboardPage = () => {
           {/* Redirects to doctor profile page */}
           <button
             className="action-btn primary"
-            onClick={() => navigate("/profile")}
+            onClick={() => navigate("/doctor/profile")}
           >
             My Profile
           </button>
