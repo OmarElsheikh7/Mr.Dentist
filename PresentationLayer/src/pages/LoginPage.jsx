@@ -20,17 +20,20 @@ const LoginPage = () => {
       // This will later call your real backend API
       
       const response = await login(email, password)
-
+      console.log('Login response:', response)
       // Redirect based on user type
-      if (response.role === 'doctor') {
-        navigate('/dashboard')
-      } else if (response.role === 'patient') {
-        navigate('/dashboard')
-      }
 
-    } catch (err) {
-      setError('Invalid email or password. Please try again.')
+    if (response.data.role === 'doctor') {
+     navigate('/dashboard')
+    }     
+    else if (response.data.role === 'patient') {
+       navigate('/dashboard')
+      }
     }
+    catch (err) {
+  setError(err.message || 'Invalid email or password. Please try again.')
+}
+
   }
 
   return (

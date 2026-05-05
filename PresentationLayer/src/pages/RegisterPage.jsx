@@ -1,17 +1,22 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
 import styles from "../assets/styles/RegisterPage.module.css";
 
 const RegisterPage = () => {
+  const { register } = useAuth()
   const [formData, setFormData] = useState({
     name: '',
-    phone: '',
+    phoneNumber: '',      
     email: '',
     gender: '',
+    dateofBirth: '', 
+    role: '',     
     password: '',
     confirmPassword: ''
   })
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -21,6 +26,7 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+    setSuccess('')  
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match!')
@@ -28,10 +34,20 @@ const RegisterPage = () => {
     }
 
     try {
-      // Later: call your backend register API here
+      await register(
+        formData.name,
+        formData.email,
+        formData.password,
+        formData.dateofBirth,
+        formData.gender,
+        formData.phoneNumber,
+        formData.role
+      )
+      setSuccess('Account created successfully! Redirecting to login...')
+      setTimeout(() => navigate('/login'), 2000)
       navigate('/login')
     } catch (err) {
-      setError('Registration failed. Please try again.')
+      setError(err.message || 'Registration failed. Please try again.')
     }
   }
 
@@ -45,6 +61,7 @@ const RegisterPage = () => {
         </div>
 
         {error && <p className={styles.error}>{error}</p>}
+        {success && <p className={styles.success}>{success}</p>}
 
         <form onSubmit={handleSubmit} className={styles.form}>
 
@@ -62,15 +79,15 @@ const RegisterPage = () => {
           </div>
 
           {/* Phone */}
-          <div className={styles.inputGroup}>
-            <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Enter your phone number"
-              value={formData.phone}
-              onChange={handleChange}
-              required
+         <div className={styles.inputGroup}>
+           <label>Phone Number</label>
+           <input
+             type="tel"
+             name="phoneNumber"         
+             placeholder="Enter your phone number"
+             value={formData.phoneNumber}  
+             onChange={handleChange}
+             required
             />
           </div>
 
@@ -86,6 +103,17 @@ const RegisterPage = () => {
               required
             />
           </div>
+          {/* Date of Birth */}
+          <div className={styles.inputGroup}>
+           <label>Date of Birth</label>
+            <input
+            type="date"
+            name="dateofBirth"
+            value={formData.dateofBirth}
+            onChange={handleChange}
+            required
+           />
+         </div>
 
           {/* Gender Dropdown */}
           <div className={styles.inputGroup}>
@@ -102,6 +130,21 @@ const RegisterPage = () => {
               <option value="female">Female</option>
             </select>
           </div>
+          {/* Role Dropdown — add this inside the form */}
+          <div className={styles.inputGroup}>
+           <label>Role</label>
+            <select
+             name="role"
+             value={formData.role}
+             onChange={handleChange}
+             className={styles.select}
+             required
+             >
+              <option value="">Select your role</option>
+              <option value="patient">Patient</option>
+              <option value="doctor">Doctor</option>
+            </select>
+           </div>
 
           {/* Password */}
           <div className={styles.inputGroup}>

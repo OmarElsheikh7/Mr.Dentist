@@ -170,3 +170,11 @@
   color: #1a3a5c; /* --blue-dark */
   text-decoration: underline;
 }
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 10px;
+}
