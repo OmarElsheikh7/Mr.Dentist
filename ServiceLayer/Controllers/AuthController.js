@@ -74,7 +74,7 @@ const getProfile = async (req, res) => {
     else if(user.role === "doctor") {
       const doctor = await DoctorRepository.findDoctorByUserId(user._id);
       return res.json({ message: "Profile fetched successfully",
-         data: { ...user.toObject(), specialty: doctor.specialty, consultationFee: doctor.consultationFee, description: doctor.description, shiftTiming: doctor.shiftTiming } });
+         data: { ...user.toObject(), specialty: doctor.specialty, consultationFee: doctor.consultationFee, description: doctor.description, StartShift: doctor.StartShift , EndShift: doctor.EndShift } });
     }
 
     else {
