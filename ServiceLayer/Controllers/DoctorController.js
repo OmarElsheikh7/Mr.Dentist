@@ -1,3 +1,4 @@
+const { startSession } = require("../../DataAccessLayer/Models/User");
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
 const ReviewRepository = require("../../DataAccessLayer/Repositories/ReviewRepository");
 const bcrypt = require("bcrypt");
@@ -8,7 +9,8 @@ const createDoctor = async (req, res) => {
       specialty: req.body.specialty,
       consultationFee: req.body.consultationFee,
       description: req.body.description,
-      shiftTiming: req.body.shiftTiming,
+      StartShift: req.body.startShift,
+      EndShift: req.body.endShift,
     };
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const userData = {
@@ -36,7 +38,8 @@ const updateDoctor = async (req, res) => {
       specialty: req.body.specialty,
       consultationFee: req.body.consultationFee,
       description: req.body.description,
-      shiftTiming: req.body.shiftTiming,
+      StartShift: req.body.startShift,
+      EndShift: req.body.endShift,
     };
     const userData = {
       name: req.body.name,
