@@ -11,8 +11,12 @@ const doctorSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  shiftTiming: {
-    type: String,
+  StartShift: {
+    type: Number,
+    required: true,
+  },
+  EndShift: {
+    type: Number,
     required: true,
   },
   consultationFee: {
