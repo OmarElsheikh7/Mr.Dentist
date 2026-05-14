@@ -11,7 +11,6 @@ const authRoute = require("./ServiceLayer/Routes/AuthRoute");
 const doctorRoute = require("./ServiceLayer/Routes/DoctorRoute");
 const reviewRoute = require("./ServiceLayer/Routes/ReviewRoute");
 const patientRoute = require("./ServiceLayer/Routes/PatientRoute");
-const App
 
 
 

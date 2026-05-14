@@ -13,6 +13,17 @@ const createReview = async (patientId, doctorId, reviewData) => {
     return await review.save();
 };
 
+const updateReview = async (reviewId, reviewData) => {
+   return await Review.findByIdAndUpdate(
+        reviewId,
+        {
+            rating: reviewData.rating,
+            comment: reviewData.comment,
+        },
+        { new: true }
+    );
+};
+
 const hadReviewed = async (patientId, doctorId) => {
     const review = await Review.findOne({ doctor: doctorId, patient: patientId });
     return review;
@@ -29,9 +40,27 @@ const getReviewsByDoctorId = async (doctorId) => {
         });
 }
 
+const getReviewsByPatientId = async (patientId) => {
+    return await Review.find({ patient: patientId }).populate({
+        path: "doctor",
+        select: "user",
+        populate: {
+            path: "user",
+            select: "name"
+        }
+    });
+};
+
+const getReviewById = async (reviewId) => {
+    return await Review.findById(reviewId);
+};
+
 module.exports = {
     createReview,
+    updateReview,
     hadReviewed,
-    getReviewsByDoctorId
+    getReviewsByDoctorId,
+    getReviewsByPatientId,
+    getReviewById
 };
 
