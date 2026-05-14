@@ -11,10 +11,11 @@ const authRoute = require("./ServiceLayer/Routes/AuthRoute");
 const doctorRoute = require("./ServiceLayer/Routes/DoctorRoute");
 const reviewRoute = require("./ServiceLayer/Routes/ReviewRoute");
 const patientRoute = require("./ServiceLayer/Routes/PatientRoute");
-const App
+const appointmentRoute = require("./ServiceLayer/Routes/AppointmentRoute");
 
 
 
+app.use("/api/appointments", appointmentRoute);
 app.use("/api/patients", patientRoute);
 app.use("/api/reviews", reviewRoute);
 app.use("/api/doctors", doctorRoute);
