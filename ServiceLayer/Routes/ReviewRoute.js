@@ -4,5 +4,6 @@ const router = express.Router();
 const { authorizeRoles, protect } = require("../Middleware/AuthMiddleware");
 
 router.post("/:id", protect, authorizeRoles("patient"), ReviewController.createReview);
+router.put("/:id", protect, authorizeRoles("patient"), ReviewController.updateReview);
 
 module.exports = router;
