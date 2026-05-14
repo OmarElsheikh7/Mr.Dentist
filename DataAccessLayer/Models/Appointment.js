@@ -15,7 +15,7 @@ const appointmentSchema = new mongoose.Schema(
     branch: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ClinicBranch",
-    // //  //required: true,
+      required: true,
     },
     
     totalCost: {

@@ -9,8 +9,8 @@ const createDoctor = async (req, res) => {
       specialty: req.body.specialty,
       consultationFee: req.body.consultationFee,
       description: req.body.description,
-      StartShift: req.body.startShift,
-      EndShift: req.body.endShift,
+      shifts: req.body.shifts,
+      branchId: req.body.branchId,
     };
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const userData = {
@@ -38,8 +38,8 @@ const updateDoctor = async (req, res) => {
       specialty: req.body.specialty,
       consultationFee: req.body.consultationFee,
       description: req.body.description,
-      StartShift: req.body.startShift,
-      EndShift: req.body.endShift,
+      shifts: req.body.shifts,
+      branchId: req.body.branchId,
     };
     const userData = {
       name: req.body.name,
