@@ -6,17 +6,19 @@ const doctorSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  branchId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ClinicBranch",
+    required: true,
+  },
   specialty: {
     type: String,
     required: true,
     trim: true,
   },
-  StartShift: {
-    type: Number,
-    required: true,
-  },
-  EndShift: {
-    type: Number,
+  shifts: {
+    type: [Number],
+    enum: [0, 1, 2],
     required: true,
   },
   consultationFee: {
@@ -28,6 +30,7 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  
 });
 
 module.exports = mongoose.model("Doctor", doctorSchema);
