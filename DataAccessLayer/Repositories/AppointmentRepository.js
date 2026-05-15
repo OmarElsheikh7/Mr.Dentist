@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
-const { getShiftById } = require("../../enums/shift.enum");
+const { getShiftById,Shift } = require("../../enums/shift.enum");
 const Appointment = require("../Models/Appointment");
 const { generateSlots } = require("../Helper/SlotsHelper");
+
 
 const BookAppointment = async (appointmentData) => {
   const appointment = new Appointment(appointmentData);

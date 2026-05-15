@@ -12,3 +12,6 @@ module.exports = router;
 
 //Patient routes  
 router.post("/:id", protect, authorizeRoles("patient"), AppointmentController.bookAppointment);
+
+//Doctor routes
+router.get("/Availableslots/:id", protect, AppointmentController.GetAvailableSlots);

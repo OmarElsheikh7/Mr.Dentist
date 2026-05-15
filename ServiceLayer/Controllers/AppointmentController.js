@@ -3,6 +3,26 @@ const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRep
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
 
 
+
+const GetAvailableSlots = async (req, res) => {
+  try {
+    const doctorId = req.params.id;
+    const doctor = await DoctorRepository.findDoctorById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    const date = req.body.date;
+    const shiftId = doctor.shiftID;
+    const slots = await AppointmentRepository.getAvailableSlots(doctorId, date, shiftId);
+    res.status(200).json({ message: "Available slots retrieved successfully", data: slots });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  } 
+};
+
+
+
 const bookAppointment = async (req, res) => {
   try {
     const patient = await PatientRepository.findPatientByUserId(req.user.id);
@@ -15,12 +35,13 @@ const bookAppointment = async (req, res) => {
       return res.status(404).json({ message: "Doctor not found" });
     }
 
+
     const appointmentData = {
         patient: patient._id,
         doctor: doctor._id,
         branch: doctor.branchId,
         appointmentDate: req.body.appointmentDate,
-        shiftId: req.body.shiftId,
+        shiftId: doctor.shiftID,
         slotTime: req.body.slotTime,
     };
 
@@ -32,4 +53,5 @@ const bookAppointment = async (req, res) => {
 };
 
 module.exports = {
-  bookAppointment, };
+  bookAppointment,
+  GetAvailableSlots,};
