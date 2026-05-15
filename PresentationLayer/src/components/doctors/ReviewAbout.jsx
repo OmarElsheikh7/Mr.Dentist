@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useReviews from "../hooks/useReviews"; // ← import your new hook
+import useReviews from "../../hooks/useReviews";
 
 const ReviewAbout = ({ onReviewSubmit }) => {
 

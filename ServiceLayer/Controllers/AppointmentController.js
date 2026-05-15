@@ -58,6 +58,7 @@ const bookAppointment = async (req, res) => {
         patient: patient._id,
         doctor: doctor._id,
         branch: doctor.branchId,
+        totalCost: doctor.consultationFee,
         appointmentDate: req.body.appointmentDate,
         shiftId: doctor.shiftID,
         slotTime: req.body.slotTime,
