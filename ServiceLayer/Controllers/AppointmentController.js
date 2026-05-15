@@ -21,6 +21,25 @@ const GetAvailableSlots = async (req, res) => {
   } 
 };
 
+const GetPatientAppointments = async (req, res) => {
+  try {
+    const patient = await PatientRepository.findPatientByUserId(req.user.id);
+    const appointments = await AppointmentRepository.getAppointmentsByPatient(patient._id);
+    res.status(200).json({ message: "Appointments retrieved successfully", data: appointments });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const GetDoctorAppointments = async (req, res) => {
+  try {
+    const doctor = await DoctorRepository.findDoctorByUserId(req.user.id);
+    const appointments = await AppointmentRepository.getAppointmentsByDoctor(doctor._id);
+    res.status(200).json({ message: "Appointments retrieved successfully", data: appointments });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
 
 const bookAppointment = async (req, res) => {
@@ -34,7 +53,6 @@ const bookAppointment = async (req, res) => {
     if (!doctor) {
       return res.status(404).json({ message: "Doctor not found" });
     }
-
 
     const appointmentData = {
         patient: patient._id,
@@ -54,4 +72,7 @@ const bookAppointment = async (req, res) => {
 
 module.exports = {
   bookAppointment,
-  GetAvailableSlots,};
+  GetAvailableSlots,
+  GetPatientAppointments,
+  GetDoctorAppointments
+};
