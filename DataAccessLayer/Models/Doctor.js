@@ -16,8 +16,8 @@ const doctorSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  shifts: {
-    type: [Number],
+  shiftID: {
+    type: Number,
     enum: [0, 1, 2],
     required: true,
   },
