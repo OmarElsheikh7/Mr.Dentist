@@ -15,7 +15,7 @@ import AppointmentsPage from './pages/AppointmentsPage'
 import DoctorsPage from './pages/DoctorsPage'
 import ReviewPage from './pages/ReviewPage'
 import NotFoundPage from './pages/NotFoundPage'
-
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 function App() {
   return (
@@ -25,10 +25,11 @@ function App() {
         <Routes>
 
           {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/landing" element={<LandingPage />} />
-
+          <Route path="/admin"element={<AdminDashboardPage />}/>
 
           {/* Protected Routes */}
          
@@ -39,6 +40,8 @@ function App() {
           <Route path="/doctors" element={<DoctorsPage />} />
           <Route path="/doctor/profile" element={<DoctorProfilePage />} />
           <Route path="*" element={<NotFoundPage />} />
+        
+
         </Routes>
         <Footer />
       </BrowserRouter>
@@ -46,4 +49,4 @@ function App() {
   )
 }
 
-export default App
+export default App;

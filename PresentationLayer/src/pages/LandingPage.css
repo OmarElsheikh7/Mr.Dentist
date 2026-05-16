@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap');
+
 /* ── Variables ──────────────────────────────────────────────────────────── */
 :root {
   --blue-dark:    #1a3a5c;
@@ -172,6 +174,17 @@ button {
   width: 250px;       
   height: auto;        
   object-fit: contain; 
+}
+
+.hero-title {
+  font-family: 'Dancing Script', cursive;
+  color: var(--blue-dark);
+  font-size: 3rem; /* Making it a bit larger since cursive fonts often look smaller */
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
 }
 
 @media (max-width: 968px) {

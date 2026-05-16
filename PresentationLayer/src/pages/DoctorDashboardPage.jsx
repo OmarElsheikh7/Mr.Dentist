@@ -1,111 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDoctor } from "../hooks/useDoctor"; 
 import "./DoctorDashboardPage.css";
 
 const DoctorDashboardPage = () => {
   const navigate = useNavigate();
-
-  // Holds doctor profile data fetched from API
-  const [doctor, setDoctor] = useState(null);
-
-  // Tracks loading state while fetching
-  const [loading, setLoading] = useState(true);
-
-  // Fetch doctor data when page loads
+const { doctor, loading, error, getDashboardData } = useDoctor();
   useEffect(() => {
-    // TODO: replace with real API call when backend is ready
-    // Example:
-    // const token = localStorage.getItem("token");
-    // const res = await fetch("/api/doctors/me", {
-    //   headers: { Authorization: `Bearer ${token}` }
-    // });
-    // const data = await res.json();
-    // setDoctor(data);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    } else {
+      getDashboardData();
+    }
+    }, [getDashboardData, navigate]);
 
-    // Hardcoded data for now — remove when API is connected
-    setTimeout(() => {
-      setDoctor({
-        name: "Dr. Sarah Ahmed",
-        specialty: "Orthodontics",
-        shiftTiming: "Sun–Thu 9AM–3PM",
-        consultationFee: 500,
-        description: "Specialist in orthodontic treatments with 10 years of experience.",
+  if (loading) return <div className="doctor-loading">Loading...</div>;
+  
+  if (error) return <div className="error-message">Error: {error}</div>;
 
-        // Branches this doctor works in — from WORKS_IN + CLINIC_BRANCH tables
-        branches: [
-          { id: 1, city: "Cairo", address: "15 Tahrir Square, Downtown Cairo" },
-          { id: 2, city: "Giza", address: "88 Pyramids Road, Giza" },
-        ],
+  if (!doctor) return null;
+  
 
-        // Appointments assigned to this doctor — from APPOINTMENT table
-        appointments: [
-          {
-            id: 1,
-            patientName: "John Doe",
-            dateTime: "2026-05-10 10:00 AM",
-            branch: "Cairo Branch",
-            totalCost: 500,
-            status: "Upcoming",
-          },
-          {
-            id: 2,
-            patientName: "Nadia Hassan",
-            dateTime: "2026-05-10 11:00 AM",
-            branch: "Cairo Branch",
-            totalCost: 500,
-            status: "Upcoming",
-          },
-          {
-            id: 3,
-            patientName: "Omar Khaled",
-            dateTime: "2026-04-28 09:00 AM",
-            branch: "Giza Branch",
-            totalCost: 500,
-            status: "Completed",
-          },
-        ],
-
-        // Reviews patients wrote about this doctor — from REVIEW table
-        reviews: [
-          {
-            id: 1,
-            patientName: "Omar Khaled",
-            rating: 5,
-            comment: "Excellent doctor, very professional.",
-            createdAt: "2026-04-28",
-          },
-          {
-            id: 2,
-            patientName: "Mona Samir",
-            rating: 4,
-            comment: "Great experience, highly recommended.",
-            createdAt: "2026-04-15",
-          },
-        ],
-      });
-      setLoading(false);
-    }, 500);
-  }, []);
-
-  // Show loading state while data is being fetched
-  if (loading) {
-    return <div className="doctor-loading">Loading dashboard...</div>;
-  }
-
-  // Count upcoming appointments for the stat box
-  const upcomingCount = doctor.appointments.filter(
-    (a) => a.status === "Upcoming"
-  ).length;
-
-  // Calculate average rating from all reviews
-  const avgRating =
-    doctor.reviews.length > 0
-      ? (
-          doctor.reviews.reduce((sum, r) => sum + r.rating, 0) /
-          doctor.reviews.length
-        ).toFixed(1)
-      : "N/A";
-
+  // Derived stats from the fetched doctor object
+  const upcomingCount = doctor.appointments?.filter((a) => a.status === "Upcoming").length || 0;
+  const avgRating = doctor.reviews?.length > 0
+    ? (doctor.reviews.reduce((sum, r) => sum + r.rating, 0) / doctor.reviews.length).toFixed(1)
+    : "N/A";
   return (
     <div className="doctor-dashboard">
 
@@ -194,14 +115,14 @@ const DoctorDashboardPage = () => {
               {/* Top row: patient name and status badge */}
               <div className="card-top">
                 <span className="card-title">{appt.patientName}</span>
-                <span className={`status-badge ${appt.status.toLowerCase()}`}>
+                {/* <span className={`status-badge ${appt.status.toLowerCase()}`}>
                   {appt.status}
-                </span>
+                </span> */}
               </div>
 
               {/* Appointment details */}
-              <p className="card-detail">Date: {appt.dateTime}</p>
-              <p className="card-detail">Branch: {appt.branch}</p>
+              <p className="card-detail">Date: {appt.appointmentDate}</p>
+              <p className="card-detail">Branch: {appt.branch.address}</p>
               <p className="card-detail">Fee: {appt.totalCost} EGP</p>
 
             </div>

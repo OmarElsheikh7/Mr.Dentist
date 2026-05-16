@@ -12,7 +12,7 @@ function useReviews() {
       try {
         const token = localStorage.getItem('token') // same as your useAuth pattern
 
-        const response = await fetch('http://localhost:5000/api/appointments?status=completed', {
+        const response = await fetch('http://localhost:5000/api/reviews?status=completed', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ function useReviews() {
     fetchAppointments()
   }, [])
 
-  // ── Submit a review for a doctor ──
+  
   const submitReview = async (doctorId, reviewData) => {
     const token = localStorage.getItem('token')
 
@@ -51,13 +51,13 @@ function useReviews() {
       body: JSON.stringify(reviewData), // { rating, comment }
     })
 
-    const data = await response.json()
+    const text = await response.text()
+console.log(text)
 
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to submit review')
-    }
-
-    return data // contains the created review from backend
+if (!response.ok) {
+  throw new Error(data.message || 'Failed to submit review') // 'data' doesn't exist here!
+}
+    return data 
   }
 
   return {

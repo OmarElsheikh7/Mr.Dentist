@@ -8,11 +8,21 @@ const ProfileCard = ({ user }) => {
     <div className="profile-card">
 
       {/* Avatar placeholder — replace div with <img> when photo upload is added */}
-      <div className="profile-avatar">
-        {/* Shows first letter of name as avatar */}
-        {user.name.charAt(0)}
+     {/* Avatar Container */}
+      <div className="profile-avatar-container">
+        {user.profilePicture ? (
+          <img 
+            src={user.profilePicture} 
+            alt={`${user.name}'s profile`} 
+            className="profile-avatar-img" 
+          />
+        ) : (
+          <div className="profile-avatar-initials">
+            {/* Shows first letter of name if no picture exists */}
+            {user.name ? user.name.charAt(0).toUpperCase() : "?"}
+          </div>
+        )}
       </div>
-
       {/* Patient name and role badge */}
       <div className="profile-card-header">
         <h2 className="profile-name">{user.name}</h2>

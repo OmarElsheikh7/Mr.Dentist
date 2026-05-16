@@ -17,7 +17,7 @@ const DoctorProfileCard = ({ doctor }) => {
       {/* Avatar placeholder — replace div with <img> when photo upload is added */}
       <div className="profile-avatar">
         {/* Shows first letter of name as avatar */}
-        {doctor.name.charAt(0)}
+        <span>{doctor?.name?.charAt(0)}</span>
       </div>
 
       {/* Doctor name and role badge */}

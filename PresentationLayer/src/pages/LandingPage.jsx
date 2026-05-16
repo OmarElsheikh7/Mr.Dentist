@@ -97,10 +97,9 @@ const LandingPage = () => {
       <section className="hero">
   <div className="hero-content">
     <p className="hero-tag">Welcome to Mr. Dentist</p>
-    <h1 className="hero-title">Your Smile Deserves <span>The Best Care</span></h1>
+    <h1 className="hero-title">Crafting Confident Smiles <span>With Precision</span></h1>
     <p className="hero-subtitle">
-      Trusted dental care across Egypt. Expert doctors, modern clinics,
-      and treatments tailored just for you.
+      Experience world-class dental care. Where advanced technology meets unparalleled expertise to give you the perfect smile you deserve.
     </p>
     <div className="hero-actions">
       <button className="btn-solid large" onClick={() => handleProtectedAction("/appointments")}>
@@ -120,8 +119,8 @@ const LandingPage = () => {
 
       <section className="section" id="services">
         <div className="section-inner">
-          <h2 className="section-heading">Our Services</h2>
-          <p className="section-sub">Everything your smile needs ,all under one roof</p>
+          <h2 className="section-heading">Premium Dental Services</h2>
+          <p className="section-sub">Comprehensive, state-of-the-art treatments for a flawless smile</p>
           <div className="services-grid">
             {services.map((s) => (
               <div className="service-card" key={s.id}>
@@ -136,8 +135,8 @@ const LandingPage = () => {
 
       <section className="section grey" id="doctors">
         <div className="section-inner">
-          <h2 className="section-heading">Meet Our Doctors</h2>
-          <p className="section-sub">Experienced specialists dedicated to your dental health</p>
+          <h2 className="section-heading">Meet Our Specialists</h2>
+          <p className="section-sub">World-class professionals committed to your care</p>
           <div className="doctors-grid">
             {doctors.map((doc) => (
               <div className="doctor-card" key={doc.id}>
@@ -163,8 +162,8 @@ const LandingPage = () => {
 
       <section className="section" id="branches">
         <div className="section-inner">
-          <h2 className="section-heading">Our Branches</h2>
-          <p className="section-sub">Conveniently located across Egypt</p>
+          <h2 className="section-heading">Clinic Locations</h2>
+          <p className="section-sub">Luxurious and modern facilities across Egypt</p>
           <div className="branches-grid">
             {branches.map((b) => (
               <div className="branch-card" key={b.id}>
@@ -180,7 +179,7 @@ const LandingPage = () => {
       <section className="section grey" id="about">
         <div className="section-inner about-inner">
           <div className="about-text">
-            <h2 className="section-heading left">About Mr. Dentist</h2>
+            <h2 className="section-heading left">The Mr. Dentist Experience</h2>
             <p>
               Founded in 2005, Mr. Dentist started as a single clinic in Cairo with a
               simple mission to make high-quality dental care accessible to everyone.

@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
 // Fields the doctor is ALLOWED to edit:
 //   name, email, phone, dateOfBirth, description
 //
@@ -15,7 +14,18 @@ const DoctorProfileForm = ({ doctor, onUpdate }) => {
     dateOfBirth: doctor.dateOfBirth || "",
     description: doctor.description || "",
   });
-
+useEffect(() => {
+    if (doctor) {
+      setFormData({
+        name: doctor.name || doctor.user?.name || "",
+        email: doctor.email || doctor.user?.email || "",
+        phone: doctor.phone || "",
+        // Dates need to be YYYY-MM-DD for the HTML input
+        dateOfBirth: doctor.dateOfBirth ? doctor.dateOfBirth.split('T')[0] : "",
+        description: doctor.description || "",
+      });
+    }
+  }, [doctor]);
   // Update a single field by name
   const handleChange = (e) => {
     const { name, value } = e.target;

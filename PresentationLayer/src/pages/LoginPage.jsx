@@ -17,11 +17,10 @@ const LoginPage = () => {
     setError('')        
 
     try {
-      // This will later call your real backend API
+      
       
       const response = await login(email, password)
       console.log('Login response:', response)
-      // Redirect based on user type
 
     if (response.data.role === 'doctor') {
      navigate('/dashboard')

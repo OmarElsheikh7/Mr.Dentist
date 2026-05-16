@@ -1,45 +1,52 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import "./DashboardPage.css" // patient styles;
 
 const DashboardPage = () => {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
-  // Hardcoded user — will come from AuthContext after login integration
-  const user = { name: "John Doe" };
+  const [appointments, setAppointments] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Hardcoded appointments — will come from GET /api/appointments later
-  const appointments = [
-    {
-      id: 1,
-      doctor: "Dr. Sarah Ahmed",
-      specialty: "Orthodontics",
-      dateTime: "2026-05-10 10:00 AM",
-      branch: "Cairo Branch",
-      totalCost: 500,
-      status: "Upcoming",
-    },
-    {
-      id: 2,
-      doctor: "Dr. Mohamed Ali",
-      specialty: "Teeth Whitening",
-      dateTime: "2026-04-20 02:00 PM",
-      branch: "Giza Branch",
-      totalCost: 300,
-      status: "Completed",
-    },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        };
 
-  // Hardcoded reviews — will come from GET /api/reviews later
-  const reviews = [
-    {
-      id: 1,
-      doctor: "Dr. Mohamed Ali",
-      rating: 5,
-      comment: "Excellent service!",
-      createdAt: "2026-04-21",
-    },
-  ];
+        const [apptRes, reviewRes] = await Promise.all([
+          fetch("http://localhost:5000/api/appointments", { headers }),
+          fetch("http://localhost:5000/api/reviews", { headers })
+        ]);
+
+        if (apptRes.ok) {
+          const apptData = await apptRes.json();
+          setAppointments(apptData.data || []);
+        }
+
+        if (reviewRes.ok) {
+          const reviewData = await reviewRes.json();
+          setReviews(reviewData.data || []);
+        }
+      } catch (err) {
+        console.error("Failed to fetch dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return <div className="dashboard-loading">Loading dashboard...</div>;
+  }
 
   return (
     <div className="dashboard">
@@ -47,7 +54,7 @@ const DashboardPage = () => {
       {/* Welcome header with patient name and summary stats */}
       <div className="dashboard-header">
         <div>
-          <h1 className="dashboard-welcome">Welcome back, {user.name}!</h1>
+          <h1 className="dashboard-welcome">Welcome back, {user?.name || "Patient"}!</h1>
           <p className="dashboard-subtitle">Here is your health summary</p>
         </div>
 
