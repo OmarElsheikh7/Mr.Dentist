@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  pictureUrl: {
+    type: String,
+    default: "https://res.cloudinary.com/dgluygqlu/image/upload/v1778953549/man-avatar_imtor0.png",
+  },
   email: {
     type: String,
     required: true,
@@ -30,6 +34,10 @@ const userSchema = new mongoose.Schema({
   dateofBirth: {
     type: Date,
     required: true,
+  },
+  pictureUrl: {
+    type: String,
+    default: "",
   },
 });
 
