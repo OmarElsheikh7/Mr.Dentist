@@ -14,10 +14,20 @@ const DoctorProfileCard = ({ doctor }) => {
   return (
     <div className="profile-card">
 
-      {/* Avatar placeholder — replace div with <img> when photo upload is added */}
-      <div className="profile-avatar">
-        {/* Shows first letter of name as avatar */}
-        <span>{doctor?.name?.charAt(0)}</span>
+      {/* Dynamic Avatar Container — Matches Patient Design */}
+      <div className="profile-avatar-container">
+        {doctor.profilePicture ? (
+          <img 
+            src={doctor.profilePicture} 
+            alt={`${doctor.name}'s profile`} 
+            className="profile-avatar-img" 
+          />
+        ) : (
+          <div className="profile-avatar-initials">
+            {/* Shows first letter of name if no picture exists */}
+            {doctor.name ? doctor.name.charAt(0).toUpperCase() : "?"}
+          </div>
+        )}
       </div>
 
       {/* Doctor name and role badge */}
@@ -32,16 +42,6 @@ const DoctorProfileCard = ({ doctor }) => {
         <div className="profile-row">
           <span className="profile-label">Email</span>
           <span className="profile-value">{doctor.email}</span>
-        </div>
-
-        <div className="profile-row">
-          <span className="profile-label">Phone</span>
-          <span className="profile-value">{doctor.phone}</span>
-        </div>
-
-        <div className="profile-row">
-          <span className="profile-label">Date of Birth</span>
-          <span className="profile-value">{doctor.dateOfBirth}</span>
         </div>
 
         <div className="profile-row">
