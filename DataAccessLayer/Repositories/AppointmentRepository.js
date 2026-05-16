@@ -9,6 +9,14 @@ const BookAppointment = async (appointmentData) => {
   return await appointment.save();
 };
 
+const updateAppointment = async (appointmentId, appointmentData) => {
+  return await Appointment.findByIdAndUpdate(appointmentId, appointmentData, { new: true });
+};
+
+const deleteAppointment = async (appointmentId) => {
+  return await Appointment.findByIdAndDelete(appointmentId);
+};
+
 const getAppointmentsByPatient = async (patientId) => {
   return await Appointment.find({ patient: patientId }).populate({
     path: "doctor",

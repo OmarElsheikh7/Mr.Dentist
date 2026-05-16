@@ -5,6 +5,14 @@ const createClinicBranch = async (clinicBranchData) => {
   return await clinicBranch.save();
 };
 
+const updateClinicBranch = async (branchId, clinicBranchData) => {
+  return await ClinicBranch.findByIdAndUpdate(branchId, clinicBranchData, { new: true });
+};
+
+const deleteClinicBranch = async (branchId) => {
+  return await ClinicBranch.findByIdAndDelete(branchId);
+};
+
 const getAllClinicBranches = async () => {
   return await ClinicBranch.find();
 };
@@ -17,4 +25,6 @@ module.exports = {
   createClinicBranch,
   getAllClinicBranches,
   getClinicBranchById,
+  updateClinicBranch,
+  deleteClinicBranch
 };

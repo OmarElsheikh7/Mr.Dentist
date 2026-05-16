@@ -13,6 +13,40 @@ const createClinicBranch = async (req, res) => {
   }
 };
 
+const updateClinicBranch = async (req, res) => {
+  try {
+    const branchId = req.params.id;
+    const clinicBranchData = {
+      address: req.body.address,
+      phoneNumber: req.body.phoneNumber,
+    }
+    const updatedBranch = await branchRepository.updateClinicBranch(branchId, clinicBranchData);
+    if (!updatedBranch) {
+      return res.status(404).json({ message: "Clinic branch not found" });
+    }
+    else {
+      return res.status(200).json({ message: "Clinic branch updated successfully", data: updatedBranch });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteClinicBranch = async (req, res) => {
+  try {
+    const branchId = req.params.id;
+    const Branch = await branchRepository.deleteClinicBranch(branchId);
+    if (!Branch) {
+      return res.status(404).json({ message: "Clinic branch not found" });
+    }
+    else {
+      return res.status(200).json({ message: "Clinic branch deleted successfully"});
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const getAllClinicBranches = async (req, res) => {
   try {
     const branches = await branchRepository.getAllClinicBranches();
@@ -38,4 +72,6 @@ module.exports = {
   createClinicBranch,
   getAllClinicBranches,
   getClinicBranchById,
+  updateClinicBranch,
+  deleteClinicBranch
 };

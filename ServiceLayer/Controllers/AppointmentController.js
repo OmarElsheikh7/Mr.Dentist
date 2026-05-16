@@ -21,6 +21,40 @@ const GetAvailableSlots = async (req, res) => {
   } 
 };
 
+const updateAppointment = async (req, res) => {
+  try {
+    const appointmentId = req.params.id;
+    
+    const appointmentData = {
+      appointmentDate: req.body.appointmentDate,
+      slotTime: req.body.slotTime,
+    };
+    const updatedAppointment = await AppointmentRepository.updateAppointment(appointmentId, appointmentData);
+    if (!updatedAppointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    } else {
+      return res.json({ message: "Appointment updated successfully", data: updatedAppointment });
+    }
+
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+const deleteAppointment = async (req, res) => {
+  try {
+    const appointmentId = req.params.id;
+    const Appointment = await AppointmentRepository.deleteAppointment(appointmentId);
+    if (!Appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    } else {
+      return res.json({ message: "Appointment deleted successfully"});
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 const GetPatientAppointments = async (req, res) => {
   try {
     const patient = await PatientRepository.findPatientByUserId(req.user.id);
@@ -75,5 +109,7 @@ module.exports = {
   bookAppointment,
   GetAvailableSlots,
   GetPatientAppointments,
-  GetDoctorAppointments
+  GetDoctorAppointments,
+  updateAppointment,
+  deleteAppointment
 };

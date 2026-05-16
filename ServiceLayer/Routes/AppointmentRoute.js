@@ -10,8 +10,11 @@ router.get("/patient/appointments", protect, authorizeRoles("patient"), Appointm
 router.post("/Availableslots/:id", protect, authorizeRoles("patient","admin"), AppointmentController.GetAvailableSlots);
 
 
+
 //Doctor routes
 router.get("/doctor/appointments", protect, authorizeRoles("doctor"), AppointmentController.GetDoctorAppointments);
+router.put("/appointments/:id", protect, authorizeRoles("admin"), AppointmentController.updateAppointment);
+router.delete("/appointments/:id", protect, authorizeRoles("admin"), AppointmentController.deleteAppointment);
 
 module.exports = router;
 
