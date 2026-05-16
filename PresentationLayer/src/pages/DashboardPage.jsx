@@ -1,6 +1,7 @@
 import React from "react";
 import PatientDashboardPage from "./PatientDashboardPage";
 import DoctorDashboardPage from "./DoctorDashboardPage";
+import AdminDashboardPage from "./AdminDashboardPage";
 import { Navigate } from "react-router-dom";
 
 const DashboardPage = () => {
@@ -21,7 +22,7 @@ const DashboardPage = () => {
   }
 
   if (role === "admin") {
-    return <AdminDashboardPage/>;
+    return <AdminDashboardPage />;
   }
 
   // Fallback if role is unknown
