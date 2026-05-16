@@ -1,35 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/styles/AdminDashboardPage.css";
+
+const BASE_URL = "http://localhost:5000/api/doctors";
 
 const AdminDashboardPage = () => {
 
   const [doctorData, setDoctorData] = useState({
     name: "",
+    email: "",
+    password: "",
     specialty: "",
     consultationFee: "",
-    shiftTiming: "",
-    branch: "",
+    description: "",
+    shiftID: "",
+    branchId: "",
+    gender: "",
+    dateofBirth: "",
   });
 
-  const [editIndex, setEditIndex] = useState(null);
+  const [doctors, setDoctors] = useState([]);
+  const [editId, setEditId] = useState(null);
 
-  const [doctors, setDoctors] = useState([
-    {
-      name: "Dr Ahmed",
-      specialty: "Cardiology",
-      consultationFee: 500,
-      shiftTiming: "5 PM - 10 PM",
-      branch: "Cairo",
-    },
-    {
-      name: "Dr Sarah",
-      specialty: "Dermatology",
-      consultationFee: 400,
-      shiftTiming: "3 PM - 8 PM",
-      branch: "Giza",
-    },
-  ]);
+  // FETCH ALL DOCTORS
+  const fetchDoctors = async () => {
+    try {
 
+      const response = await fetch(BASE_URL);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      setDoctors(data.data);
+
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
+  // HANDLE INPUT CHANGE
+  
   const handleChange = (e) => {
     setDoctorData({
       ...doctorData,
@@ -37,59 +53,133 @@ const AdminDashboardPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  
+  // CREATE / UPDATE DOCTOR
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Update doctor
-    if (editIndex !== null) {
+    try {
 
-      const updatedDoctors = [...doctors];
+      const token = localStorage.getItem("token");
 
-      updatedDoctors[editIndex] = doctorData;
+      if (!token) {
+        alert("Please login first");
+        return;
+      }
 
-      setDoctors(updatedDoctors);
+      const url = editId
+        ? `${BASE_URL}/${editId}`
+        : BASE_URL;
 
-      setEditIndex(null);
+      const method = editId ? "PUT" : "POST";
 
-    } 
-    
-    // Create doctor
-    else {
+      const response = await fetch(url, {
+        method,
 
-      setDoctors([...doctors, doctorData]);
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
 
+        body: JSON.stringify(doctorData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      alert(
+        editId
+          ? "Doctor updated successfully"
+          : "Doctor created successfully"
+      );
+
+      fetchDoctors();
+
+      setDoctorData({
+        name: "",
+        email: "",
+        password: "",
+        specialty: "",
+        consultationFee: "",
+        description: "",
+        shiftID: "",
+        branchId: "",
+        gender: "",
+        dateofBirth: "",
+      });
+
+      setEditId(null);
+
+    } catch (error) {
+      console.error(error.message);
+      alert(error.message);
     }
+  };
 
-    // Reset form
+ 
+  // DELETE DOCTOR
+
+  const handleDelete = async (id) => {
+
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        `${BASE_URL}/${id}`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      alert("Doctor deleted successfully");
+
+      fetchDoctors();
+
+    } catch (error) {
+      console.error(error.message);
+      alert(error.message);
+    }
+  };
+
+ 
+  // Edit doctor
+  const handleEdit = (doctor) => {
+
     setDoctorData({
-      name: "",
-      specialty: "",
-      consultationFee: "",
-      shiftTiming: "",
-      branch: "",
+      name: doctor.userId?.name || "",
+      email: doctor.userId?.email || "",
+      password: "",
+      specialty: doctor.specialty || "",
+      consultationFee: doctor.consultationFee || "",
+      description: doctor.description || "",
+      shiftID: doctor.shiftID || "",
+      branchId: doctor.branchId || "",
+      gender: doctor.userId?.gender || "",
+      dateofBirth: doctor.userId?.dateofBirth?.split("T")[0] || "",
     });
-  };
 
-  const handleDelete = (index) => {
-
-    const updatedDoctors = doctors.filter(
-      (_, i) => i !== index
-    );
-
-    setDoctors(updatedDoctors);
-  };
-
-  const handleEdit = (index) => {
-
-    setDoctorData(doctors[index]);
-
-    setEditIndex(index);
+    setEditId(doctor._id);
   };
 
   return (
     <div className="dashboard">
 
-      {/* Header */}
+      {/* HEADER */}
       <div className="dashboard-header">
 
         <div>
@@ -98,11 +188,10 @@ const AdminDashboardPage = () => {
           </h1>
 
           <p className="dashboard-subtitle">
-            Manage doctors, schedules and branches
+            Manage Doctors
           </p>
         </div>
 
-        {/* Stats */}
         <div className="dashboard-stats">
 
           <div className="stat-box">
@@ -115,48 +204,55 @@ const AdminDashboardPage = () => {
             </span>
           </div>
 
-          <div className="stat-box">
-            <span className="stat-number">
-              5
-            </span>
-
-            <span className="stat-label">
-              Branches
-            </span>
-          </div>
-
         </div>
 
       </div>
 
-      {/* Form Section */}
+      {/* FORM */}
       <div className="dashboard-section">
 
         <h2 className="section-title">
-
-          {editIndex !== null
-            ? "Edit Doctor"
-            : "Register Doctor"}
-
+          {editId ? "Update Doctor" : "Create Doctor"}
         </h2>
 
-        <form className="admin-form" onSubmit={handleSubmit}>
+        <form
+          className="admin-form"
+          onSubmit={handleSubmit}
+        >
 
           <div className="form-grid">
 
             <input
               type="text"
-              placeholder="Doctor Name"
               name="name"
+              placeholder="Doctor Name"
               value={doctorData.name}
               onChange={handleChange}
               required
             />
 
             <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={doctorData.email}
+              onChange={handleChange}
+              required
+            />
+
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={doctorData.password}
+              onChange={handleChange}
+              required={!editId}
+            />
+
+            <input
               type="text"
-              placeholder="Specialty"
               name="specialty"
+              placeholder="Specialty"
               value={doctorData.specialty}
               onChange={handleChange}
               required
@@ -164,8 +260,8 @@ const AdminDashboardPage = () => {
 
             <input
               type="number"
-              placeholder="Consultation Fee"
               name="consultationFee"
+              placeholder="Consultation Fee"
               value={doctorData.consultationFee}
               onChange={handleChange}
               required
@@ -173,18 +269,53 @@ const AdminDashboardPage = () => {
 
             <input
               type="text"
-              placeholder="Shift Timing"
-              name="shiftTiming"
-              value={doctorData.shiftTiming}
+              name="description"
+              placeholder="Description"
+              value={doctorData.description}
+              onChange={handleChange}
+            />
+
+            <input
+              type="text"
+              name="shiftID"
+              placeholder="Shift ID"
+              value={doctorData.shiftID}
               onChange={handleChange}
               required
             />
 
             <input
               type="text"
-              placeholder="Branch"
-              name="branch"
-              value={doctorData.branch}
+              name="branchId"
+              placeholder="Branch ID"
+              value={doctorData.branchId}
+              onChange={handleChange}
+              required
+            />
+
+            <select
+              name="gender"
+              value={doctorData.gender}
+              onChange={handleChange}
+              required
+            >
+              <option value="">
+                Select Gender
+              </option>
+
+              <option value="male">
+                Male
+              </option>
+
+              <option value="female">
+                Female
+              </option>
+            </select>
+
+            <input
+              type="date"
+              name="dateofBirth"
+              value={doctorData.dateofBirth}
               onChange={handleChange}
               required
             />
@@ -192,18 +323,16 @@ const AdminDashboardPage = () => {
           </div>
 
           <button className="action-btn primary">
-
-            {editIndex !== null
+            {editId
               ? "Update Doctor"
               : "Create Doctor"}
-
           </button>
 
         </form>
 
       </div>
 
-      {/* Doctors Section */}
+      {/* DOCTORS */}
       <div className="dashboard-section">
 
         <h2 className="section-title">
@@ -212,14 +341,17 @@ const AdminDashboardPage = () => {
 
         <div className="cards-grid">
 
-          {doctors.map((doctor, index) => (
+          {doctors.map((doctor) => (
 
-            <div className="doctor-card" key={index}>
+            <div
+              className="doctor-card"
+              key={doctor._id}
+            >
 
               <div className="card-top">
 
                 <span className="card-title">
-                  {doctor.name}
+                  {doctor.userId?.name}
                 </span>
 
                 <span className="status-badge upcoming">
@@ -233,25 +365,25 @@ const AdminDashboardPage = () => {
               </p>
 
               <p className="card-detail">
-                Shift: {doctor.shiftTiming}
+                Email: {doctor.userId?.email}
               </p>
 
               <p className="card-detail">
-                Branch: {doctor.branch}
+                Gender: {doctor.userId?.gender}
               </p>
 
               <div className="doctor-actions">
 
                 <button
                   className="action-btn secondary"
-                  onClick={() => handleEdit(index)}
+                  onClick={() => handleEdit(doctor)}
                 >
                   Edit
                 </button>
 
                 <button
                   className="action-btn delete"
-                  onClick={() => handleDelete(index)}
+                  onClick={() => handleDelete(doctor._id)}
                 >
                   Delete
                 </button>

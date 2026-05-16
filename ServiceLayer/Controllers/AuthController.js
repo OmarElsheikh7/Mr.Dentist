@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const { generateToken } = require("../Helpers/AuthHelper");
+const { uploadToCloudinary } = require("../Helpers/CloudinaryHelper");
 const UserRepository = require("../../DataAccessLayer/Repositories/UserRepository");
 const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRepository");
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
@@ -21,6 +22,7 @@ const register = async (req, res) => {
       role: "patient",
       dateofBirth: req.body.dateofBirth,
       gender: req.body.gender,
+      pictureUrl: req.body.pictureUrl,
     });
     await PatientRepository.createPatient({
       user: user._id,
@@ -95,6 +97,7 @@ const updateProfile = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       dateofBirth: req.body.dateofBirth,
+      pictureUrl: req.body.pictureUrl,
     };
 
     if (req.user.role === "patient") {
@@ -141,11 +144,42 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const uploadProfilePicture = async (req, res) => {
+  try {
+    // 1. Check if Multer successfully caught the file
+    if (!req.file) {
+      return res.status(400).json({ message: "No image file provided" });
+    }
+
+    const userId = req.user.id;
+
+    // 2. Upload the file to Cloudinary
+    // We can just use a general "users" folder now since everyone is in the User table
+    const imageUrl = await uploadToCloudinary(req.file.path, "mr_dentist/users");
+
+    // 3. Update the User table directly! 
+    // (You don't care if they are a patient or doctor here)
+    const updatedUser = await UserRepository.updateUser(userId, {
+      pictureUrl: imageUrl 
+    });
+
+    // 4. Return the new image URL to the frontend
+    return res.status(200).json({
+      message: "Profile picture updated successfully",
+      pictureUrl: imageUrl,
+      data: updatedUser
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error uploading profile picture", error: error.message });
+  }
+};
 
 
 module.exports = {
   register,
   login,
   getProfile,
-  updateProfile
+  updateProfile,
+  uploadProfilePicture
 };

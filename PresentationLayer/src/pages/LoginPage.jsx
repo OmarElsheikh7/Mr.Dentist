@@ -17,18 +17,23 @@ const LoginPage = () => {
     setError('')        
 
     try {
-      
-      
       const response = await login(email, password)
       console.log('Login response:', response)
-
+    
     if (response.data.role === 'doctor') {
      navigate('/dashboard')
     }     
     else if (response.data.role === 'patient') {
        navigate('/dashboard')
       }
+
+      else if(response.data.role === 'admin') {
+        navigate('/admin')
+      }
     }
+
+
+
     catch (err) {
   setError(err.message || 'Invalid email or password. Please try again.')
 }

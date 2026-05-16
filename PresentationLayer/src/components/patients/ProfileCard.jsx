@@ -7,12 +7,12 @@ const ProfileCard = ({ user }) => {
   return (
     <div className="profile-card">
 
-      {/* Avatar placeholder — replace div with <img> when photo upload is added */}
-     {/* Avatar Container */}
+      {/* Avatar Container */}
       <div className="profile-avatar-container">
-        {user.profilePicture ? (
+        {/* CHANGED: Now looks for pictureUrl from your backend */}
+        {user.pictureUrl ? (
           <img 
-            src={user.profilePicture} 
+            src={user.pictureUrl} 
             alt={`${user.name}'s profile`} 
             className="profile-avatar-img" 
           />
@@ -23,6 +23,7 @@ const ProfileCard = ({ user }) => {
           </div>
         )}
       </div>
+      
       {/* Patient name and role badge */}
       <div className="profile-card-header">
         <h2 className="profile-name">{user.name}</h2>

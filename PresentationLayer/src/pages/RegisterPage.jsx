@@ -11,7 +11,7 @@ const RegisterPage = () => {
     email: '',
     gender: '',
     dateofBirth: '', 
-    role: '',     
+    // role: '',     
     password: '',
     confirmPassword: ''
   })
@@ -41,7 +41,7 @@ const RegisterPage = () => {
         formData.dateofBirth,
         formData.gender,
         formData.phoneNumber,
-        formData.role
+        // formData.role
       )
       setSuccess('Account created successfully! Redirecting to login...')
       setTimeout(() => navigate('/login'), 2000)
@@ -130,7 +130,7 @@ const RegisterPage = () => {
               <option value="female">Female</option>
             </select>
           </div>
-          {/* Role Dropdown — add this inside the form */}
+          {/* Role Dropdown — add this inside the form
           <div className={styles.inputGroup}>
            <label>Role</label>
             <select
@@ -144,7 +144,7 @@ const RegisterPage = () => {
               <option value="patient">Patient</option>
               <option value="doctor">Doctor</option>
             </select>
-           </div>
+           </div> */}
 
           {/* Password */}
           <div className={styles.inputGroup}>

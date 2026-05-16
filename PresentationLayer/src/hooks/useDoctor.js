@@ -8,7 +8,7 @@ export const useDoctor = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Helper function to manage headers and tokens
+  
   const getHeaders = useCallback(() => {
     const token = localStorage.getItem("token");
     if (!token) {

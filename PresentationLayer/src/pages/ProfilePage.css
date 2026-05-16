@@ -329,6 +329,38 @@
 .form-submit:hover {
   background: var(--blue-dark);
 }
+.profile-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 10px;
+}
+
+.profile-heading {
+  margin: 0;
+}
+
+.profile-logout-btn {
+  background-color: #dc3545; /* Clean crimson red */
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.profile-logout-btn:hover {
+  background-color: #bd2130;
+}
+
+.profile-logout-btn:active {
+  transform: scale(0.97);
+}
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
