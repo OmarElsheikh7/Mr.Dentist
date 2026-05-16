@@ -8,11 +8,9 @@
     "mongoose": "^9.6.2",
     "nodemon": "^3.1.14",
     "router": "^2.2.0"
-    },
+  },
   "scripts": {
     "start": "node Index.js",
     "dev": "nodemon Index.js"
   }
 }
-  
-
