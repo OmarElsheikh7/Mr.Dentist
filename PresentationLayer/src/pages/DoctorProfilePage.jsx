@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import DoctorProfileCard from "../components/doctors/DoctorProfileCard";
 import DoctorProfileForm from "../components/doctors/DoctorProfileForm";
 import { useDoctor } from "../hooks/useDoctor";
@@ -12,6 +13,8 @@ const DoctorProfilePage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
 
+  const navigate = useNavigate(); // Initialize navigation
+
   useEffect(() => {
     getProfileData();
   }, [getProfileData]);
@@ -24,6 +27,12 @@ const DoctorProfilePage = () => {
       setTimeout(() => setSaveSuccess(false), 3000);
       getProfileData(); 
     }
+  };
+
+  // --- NEW: Logout Function ---
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // Clear the authentication token
+    navigate("/login"); // Redirect to the login page (or "/" if your login is at root)
   };
 
   const handleImageChange = (e) => {
@@ -45,7 +54,7 @@ const DoctorProfilePage = () => {
       if (result) {
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
-        setSelectedImage(null); 
+        setSelectedImage(null);
         getProfileData(); 
       }
     } catch (err) {
@@ -69,7 +78,13 @@ const DoctorProfilePage = () => {
 
   return (
     <div className="profile-page">
-      <h1 className="profile-heading">My Profile</h1>
+      {/* Top section containing header and logout action wrapper */}
+      <div className="profile-header-container">
+        <h1 className="profile-heading">My Profile</h1>
+        <button className="profile-logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
 
       {saveSuccess && (
         <div className="profile-success">
@@ -77,14 +92,13 @@ const DoctorProfilePage = () => {
         </div>
       )}
 
-      {/* The Card always shows the most recent data */}
       <DoctorProfileCard doctor={doctor} />
 
       <button
         className={`profile-edit-toggle ${isEditing ? "cancel-btn" : ""}`}
         onClick={() => {
           setIsEditing(!isEditing);
-          setSelectedImage(null); // Clear selected image if they cancel editing
+          setSelectedImage(null);
         }}
       >
         {isEditing ? "Cancel" : "Edit Profile"}
@@ -92,7 +106,6 @@ const DoctorProfilePage = () => {
 
       {isEditing && (
         <div className="profile-edit-section">
-          {/* --- NEW: Profile Picture Upload Section --- */}
           <div className="profile-picture-upload">
             <h3>Update Profile Picture</h3>
             <input 
@@ -113,10 +126,6 @@ const DoctorProfilePage = () => {
           </div>
           <hr />
 
-          /* CRITICAL FIX: Adding key={doctor._id} ensures that when the 
-             doctor data is loaded, the form re-renders and populates 
-             the fields correctly instead of staying blank.
-          */
           <DoctorProfileForm 
             key={doctor._id || "doctor-form"} 
             doctor={doctor} 

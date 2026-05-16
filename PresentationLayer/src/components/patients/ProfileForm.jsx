@@ -51,7 +51,7 @@ const ProfileForm = ({ user, onUpdate }) => {
         <input
           className="form-input"
           type="date"
-          value={dateOfBirth}
+          value={FormData.dateOfBirth}
           onChange={(e) => setDateOfBirth(e.target.value)}
         />
       </div>
@@ -62,7 +62,7 @@ const ProfileForm = ({ user, onUpdate }) => {
         <input
           className="form-input"
           type="tel"
-          value={phone}
+          value={FormData.phone}
           onChange={(e) => setPhone(e.target.value)}
         />
       </div>

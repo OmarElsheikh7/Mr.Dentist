@@ -14,7 +14,6 @@ function Navbar() {
           &rarr;
         </button>
       </div>
-      <Link to="/" className="nav-btn">Logout</Link>
     </nav>
   )
 }

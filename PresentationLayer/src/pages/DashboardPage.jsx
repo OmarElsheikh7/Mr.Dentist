@@ -4,10 +4,10 @@ import DoctorDashboardPage from "./DoctorDashboardPage";
 import { Navigate } from "react-router-dom";
 
 const DashboardPage = () => {
-  // Pull the actual role saved during login
+ 
   const role = localStorage.getItem("role");
 
-  // Handle cases where the user isn't logged in
+  
   if (!role) {
     return <Navigate to="/login" />;
   }

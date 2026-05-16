@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from "react";
-// Fields the doctor is ALLOWED to edit:
-//   name, email, phone, dateOfBirth, description
-//
-// Fields the doctor CANNOT edit (admin only):
-//   shiftStart, shiftEnd — these are shown as read-only for transparency
-//   so the doctor can see their shift but not change it
+
 
 const DoctorProfileForm = ({ doctor, onUpdate }) => {
   const [formData, setFormData] = useState({
@@ -20,19 +15,16 @@ useEffect(() => {
         name: doctor.name || doctor.user?.name || "",
         email: doctor.email || doctor.user?.email || "",
         phone: doctor.phone || "",
-        // Dates need to be YYYY-MM-DD for the HTML input
         dateOfBirth: doctor.dateOfBirth ? doctor.dateOfBirth.split('T')[0] : "",
         description: doctor.description || "",
       });
     }
   }, [doctor]);
-  // Update a single field by name
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Pass updated data up to DoctorProfilePage
   const handleSubmit = (e) => {
     e.preventDefault();
     onUpdate(formData);
@@ -68,30 +60,7 @@ useEffect(() => {
         />
       </div>
 
-      <div className="form-group">
-        <label className="form-label">Phone Number</label>
-        <input
-          className="form-input"
-          type="tel"
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label className="form-label">Date of Birth</label>
-        <input
-          className="form-input"
-          type="date"
-          name="dateOfBirth"
-          value={formData.dateOfBirth}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
+      
       <div className="form-group">
         <label className="form-label">Description / Bio</label>
         <textarea
