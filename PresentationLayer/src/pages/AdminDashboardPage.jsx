@@ -47,11 +47,19 @@ const AdminDashboardPage = () => {
   // HANDLE INPUT CHANGE
   
   const handleChange = (e) => {
-    setDoctorData({
-      ...doctorData,
-      [e.target.name]: e.target.value,
-    });
-  };
+
+    const { name, value } = e.target;
+
+   setDoctorData({
+    ...doctorData,
+
+    [name]:
+      name === "shiftID"
+        ? Number(value)
+        : value,
+     });
+
+      };
 
   
   // CREATE / UPDATE DOCTOR
