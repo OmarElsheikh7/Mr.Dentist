@@ -19,10 +19,23 @@ const AdminDashboardPage = () => {
   });
 
   const [doctors, setDoctors] = useState([]);
+
+  // DYNAMIC BRANCHES
+  const [branches, setBranches] = useState([]);
+
   const [editId, setEditId] = useState(null);
 
-  // FETCH ALL DOCTORS
+  // PAGINATION
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const doctorsPerPage = 8;
+
+ 
+  // FETCH DOCTORS
+ 
+
   const fetchDoctors = async () => {
+
     try {
 
       const response = await fetch(BASE_URL);
@@ -33,38 +46,84 @@ const AdminDashboardPage = () => {
         throw new Error(data.message);
       }
 
-      setDoctors(data.data);
+      setDoctors(data.data || []);
 
     } catch (error) {
+
       console.error(error.message);
+
     }
+
   };
 
+  
+  // FETCH BRANCHES
+  
+
+  const fetchBranches = async () => {
+
+    try {
+
+      const response = await fetch(
+        "http://localhost:5000/api/clinicBranches"
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+
+      setBranches(
+        Array.isArray(data.data)
+          ? data.data
+          : []
+      );
+
+    } catch (error) {
+
+      console.error(error.message);
+
+    }
+
+  };
+
+  // =========================
+  // LOAD DATA
+  // =========================
+
   useEffect(() => {
+
     fetchDoctors();
+    fetchBranches();
+
   }, []);
 
+  // =========================
   // HANDLE INPUT CHANGE
-  
+  // =========================
+
   const handleChange = (e) => {
 
     const { name, value } = e.target;
 
-   setDoctorData({
-    ...doctorData,
+    setDoctorData({
+      ...doctorData,
 
-    [name]:
-      name === "shiftID"
-        ? Number(value)
-        : value,
-     });
+      [name]:
+        name === "shiftID"
+          ? Number(value)
+          : value,
+    });
 
-      };
+  };
 
-  
+ 
   // CREATE / UPDATE DOCTOR
+  
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     try {
@@ -80,9 +139,12 @@ const AdminDashboardPage = () => {
         ? `${BASE_URL}/${editId}`
         : BASE_URL;
 
-      const method = editId ? "PUT" : "POST";
+      const method = editId
+        ? "PUT"
+        : "POST";
 
       const response = await fetch(url, {
+
         method,
 
         headers: {
@@ -91,6 +153,7 @@ const AdminDashboardPage = () => {
         },
 
         body: JSON.stringify(doctorData),
+
       });
 
       const data = await response.json();
@@ -107,6 +170,7 @@ const AdminDashboardPage = () => {
 
       fetchDoctors();
 
+      // RESET FORM
       setDoctorData({
         name: "",
         email: "",
@@ -123,13 +187,17 @@ const AdminDashboardPage = () => {
       setEditId(null);
 
     } catch (error) {
+
       console.error(error.message);
       alert(error.message);
+
     }
+
   };
 
- 
+  
   // DELETE DOCTOR
+ 
 
   const handleDelete = async (id) => {
 
@@ -159,38 +227,66 @@ const AdminDashboardPage = () => {
       fetchDoctors();
 
     } catch (error) {
+
       console.error(error.message);
       alert(error.message);
+
     }
+
   };
 
+  // EDIT DOCTOR
  
-  // Edit doctor
+
   const handleEdit = (doctor) => {
 
     setDoctorData({
-      name: doctor.userId?.name || "",
-      email: doctor.userId?.email || "",
+      name: doctor.user.name || "",
+      email: doctor.user.email || "",
       password: "",
       specialty: doctor.specialty || "",
       consultationFee: doctor.consultationFee || "",
       description: doctor.description || "",
-      shiftID: doctor.shiftID || "",
-      branchId: doctor.branchId || "",
-      gender: doctor.userId?.gender || "",
-      dateofBirth: doctor.userId?.dateofBirth?.split("T")[0] || "",
+      shiftID: doctor.shiftID ?? "",
+      branchId: doctor.branchId ?? "",
+      gender: doctor.user.gender || "",
+      dateofBirth:
+        doctor.user.dateofBirth
+          ?.split("T")[0] || "",
     });
 
     setEditId(doctor._id);
+
   };
 
+  // =========================
+  // PAGINATION LOGIC
+  // =========================
+
+  const indexOfLastDoctor =
+    currentPage * doctorsPerPage;
+
+  const indexOfFirstDoctor =
+    indexOfLastDoctor - doctorsPerPage;
+
+  const currentDoctors = doctors.slice(
+    indexOfFirstDoctor,
+    indexOfLastDoctor
+  );
+
+  const totalPages = Math.ceil(
+    doctors.length / doctorsPerPage
+  );
+
   return (
+
     <div className="dashboard">
 
       {/* HEADER */}
       <div className="dashboard-header">
 
         <div>
+
           <h1 className="dashboard-welcome">
             Admin Dashboard
           </h1>
@@ -198,11 +294,13 @@ const AdminDashboardPage = () => {
           <p className="dashboard-subtitle">
             Manage Doctors
           </p>
+
         </div>
 
         <div className="dashboard-stats">
 
           <div className="stat-box">
+
             <span className="stat-number">
               {doctors.length}
             </span>
@@ -210,6 +308,7 @@ const AdminDashboardPage = () => {
             <span className="stat-label">
               Doctors
             </span>
+
           </div>
 
         </div>
@@ -220,7 +319,11 @@ const AdminDashboardPage = () => {
       <div className="dashboard-section">
 
         <h2 className="section-title">
-          {editId ? "Update Doctor" : "Create Doctor"}
+
+          {editId
+            ? "Update Doctor"
+            : "Create Doctor"}
+
         </h2>
 
         <form
@@ -283,23 +386,55 @@ const AdminDashboardPage = () => {
               onChange={handleChange}
             />
 
-            <input
-              type="text"
+            <select
               name="shiftID"
-              placeholder="Shift ID"
               value={doctorData.shiftID}
               onChange={handleChange}
               required
-            />
+            >
 
-            <input
-              type="text"
+              <option value="">
+                Select Shift
+              </option>
+
+              <option value={0}>
+                Morning (08:00 - 16:00)
+              </option>
+
+              <option value={1}>
+                Afternoon (16:00 - 00:00)
+              </option>
+
+              <option value={2}>
+                Night (00:00 - 08:00)
+              </option>
+
+            </select>
+
+            {/* DYNAMIC BRANCHES */}
+            <select
               name="branchId"
-              placeholder="Branch ID"
               value={doctorData.branchId}
               onChange={handleChange}
               required
-            />
+            >
+
+              <option value="">
+                Select Branch
+              </option>
+
+              {branches.map((branch) => (
+
+                <option
+                  key={branch._id}
+                  value={branch._id}
+                >
+                  {branch.address}
+                </option>
+
+              ))}
+
+            </select>
 
             <select
               name="gender"
@@ -307,6 +442,7 @@ const AdminDashboardPage = () => {
               onChange={handleChange}
               required
             >
+
               <option value="">
                 Select Gender
               </option>
@@ -318,6 +454,7 @@ const AdminDashboardPage = () => {
               <option value="female">
                 Female
               </option>
+
             </select>
 
             <input
@@ -331,83 +468,170 @@ const AdminDashboardPage = () => {
           </div>
 
           <button className="action-btn primary">
+
             {editId
               ? "Update Doctor"
               : "Create Doctor"}
+
           </button>
 
         </form>
 
       </div>
 
-      {/* DOCTORS */}
+      {/* DOCTORS TABLE */}
       <div className="dashboard-section">
 
         <h2 className="section-title">
           Doctors
         </h2>
 
-        <div className="cards-grid">
+        <div className="table-wrapper">
 
-          {doctors.map((doctor) => (
+          <table className="doctor-table">
 
-            <div
-              className="doctor-card"
-              key={doctor._id}
+            <thead>
+
+              <tr>
+                <th>Name</th>
+                <th>Specialty</th>
+                <th>Email</th>
+                <th>Fee</th>
+                <th>Gender</th>
+                <th>Shift</th>
+                <th>Branch</th>
+                <th>Actions</th>
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {currentDoctors.map((doctor) => (
+
+                <tr key={doctor._id}>
+
+                  <td>{doctor.user.name}</td>
+
+                  <td>
+                    <span className="status-badge upcoming">
+                      {doctor.specialty}
+                    </span>
+                  </td>
+
+                  <td>{doctor.user.email}</td>
+
+                  <td>
+                    {doctor.consultationFee} EGP
+                  </td>
+
+                  <td>{doctor.user.gender}</td>
+
+                  <td>
+
+                    {
+                      doctor.shiftID === 0
+                        ? "Morning"
+                        : doctor.shiftID === 1
+                        ? "Afternoon"
+                        : "Night"
+                    }
+
+                  </td>
+
+                  <td>
+
+                    {
+                      branches.find(
+                        (branch) =>
+                          String(branch._id) ===
+                          String(doctor.branchId)
+                      )?.address || "Unknown"
+                    }
+
+                  </td>
+
+                  <td>
+
+                    <div className="doctor-actions">
+
+                      <button
+                        className="action-btn secondary"
+                        onClick={() => handleEdit(doctor)}
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        className="action-btn delete"
+                        onClick={() => handleDelete(doctor._id)}
+                      >
+                        Delete
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+        {/* PAGINATION */}
+        <div className="pagination">
+
+          <button
+            className="page-btn"
+            disabled={currentPage === 1}
+            onClick={() =>
+              setCurrentPage((prev) => prev - 1)
+            }
+          >
+            Prev
+          </button>
+
+          {[...Array(totalPages)].map((_, index) => (
+
+            <button
+              key={index}
+              className={
+                currentPage === index + 1
+                  ? "page-btn active"
+                  : "page-btn"
+              }
+              onClick={() =>
+                setCurrentPage(index + 1)
+              }
             >
-
-              <div className="card-top">
-
-                <span className="card-title">
-                  {doctor.userId?.name}
-                </span>
-
-                <span className="status-badge upcoming">
-                  {doctor.specialty}
-                </span>
-
-              </div>
-
-              <p className="card-detail">
-                Fee: {doctor.consultationFee} EGP
-              </p>
-
-              <p className="card-detail">
-                Email: {doctor.userId?.email}
-              </p>
-
-              <p className="card-detail">
-                Gender: {doctor.userId?.gender}
-              </p>
-
-              <div className="doctor-actions">
-
-                <button
-                  className="action-btn secondary"
-                  onClick={() => handleEdit(doctor)}
-                >
-                  Edit
-                </button>
-
-                <button
-                  className="action-btn delete"
-                  onClick={() => handleDelete(doctor._id)}
-                >
-                  Delete
-                </button>
-
-              </div>
-
-            </div>
+              {index + 1}
+            </button>
 
           ))}
+
+          <button
+            className="page-btn"
+            disabled={currentPage === totalPages}
+            onClick={() =>
+              setCurrentPage((prev) => prev + 1)
+            }
+          >
+            Next
+          </button>
 
         </div>
 
       </div>
 
     </div>
+
   );
+
 };
 
 export default AdminDashboardPage;

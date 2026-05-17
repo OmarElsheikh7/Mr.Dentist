@@ -1,4 +1,7 @@
-/* Admin Form */
+/* =========================
+   ADMIN FORM
+========================= */
+
 .admin-form {
   background: var(--white);
   padding: 24px;
@@ -8,53 +11,90 @@
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns:
+    repeat(auto-fill, minmax(240px, 1fr));
+
   gap: 16px;
   margin-bottom: 20px;
 }
 
-.form-grid input {
+.form-grid input,
+.form-grid select {
   padding: 12px;
+
   border: 1px solid #dbe4f0;
+
   border-radius: 8px;
+
   font-size: 0.95rem;
 }
 
-.form-grid input:focus {
+.form-grid input:focus,
+.form-grid select:focus {
   outline: none;
   border-color: var(--blue-mid);
 }
 
-/* Doctor Card */
-.doctor-card {
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
   background: var(--white);
+
   border-radius: var(--radius);
-  padding: 20px;
+
   box-shadow: var(--shadow);
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.doctor-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px;
 }
 
-.card-title {
-  font-size: 1rem;
+.doctor-table thead {
+  background: #f8fafc;
+}
+
+.doctor-table th {
+  text-align: left;
+
+  padding: 16px;
+
+  font-size: 0.95rem;
   font-weight: 700;
+
   color: var(--blue-dark);
+
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.card-detail {
+.doctor-table td {
+  padding: 16px;
+
+  border-bottom: 1px solid #f1f5f9;
+
   font-size: 0.92rem;
+
   color: var(--grey-mid);
 }
 
-/* Buttons */
+.doctor-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.doctor-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
 .doctor-actions {
   display: flex;
   gap: 10px;
@@ -68,4 +108,85 @@
 
 .action-btn.delete:hover {
   background: #991b1b;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 24px;
+}
+
+.page-btn {
+  min-width: 40px;
+  height: 40px;
+
+  padding: 0 14px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #e5e7eb;
+  color: #1f2937;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.page-btn:hover {
+  background: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.page-btn.active {
+  background: var(--blue-mid);
+  color: white;
+
+  box-shadow:
+    0 4px 12px
+    rgba(37, 99, 235, 0.25);
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+  .doctor-table {
+    min-width: 900px;
+  }
+
+  .pagination {
+    gap: 6px;
+  }
+
+  .page-btn {
+    min-width: 36px;
+    height: 36px;
+
+    font-size: 0.85rem;
+
+    padding: 0 10px;
+  }
+
 }
