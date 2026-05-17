@@ -7,6 +7,20 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+
+const limiter = require("express-rate-limit")({
+  windowMs: 900000, 
+  max: 100, 
+  standardHeaders: true, 
+  message: {
+    success: false,
+    statusCode: 429,
+    message: "Too many requests from this IP, please try again after 15 minutes",
+  },
+});
+
+app.use(limiter);
+
 const authRoute = require("./ServiceLayer/Routes/AuthRoute");
 const doctorRoute = require("./ServiceLayer/Routes/DoctorRoute");
 const reviewRoute = require("./ServiceLayer/Routes/ReviewRoute");
