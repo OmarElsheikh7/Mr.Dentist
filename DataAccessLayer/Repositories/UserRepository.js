@@ -25,6 +25,8 @@ const getAllUsers = async () => {
     return await User.find();
 };
 
+
+
 module.exports = {
   createUser,
   findUserByEmail,

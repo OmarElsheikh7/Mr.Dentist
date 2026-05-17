@@ -76,15 +76,15 @@ const deleteDoctor = async (doctorId) => {
 };
 
 const findDoctorByUserId = async (userId) => {
-  return await Doctor.findOne({ user: userId }).populate("user");
+  return await Doctor.findOne({ user: userId }).populate("user").populate("branchId");;
 };
 
 const findDoctorById = async (doctorId) => {
-  return await Doctor.findById(doctorId).populate("user");
+  return await Doctor.findById(doctorId).populate("user").populate("branchId");
 };
 
 const getAllDoctors = async () => {
-  return await Doctor.find().populate("user");
+  return await Doctor.find().populate("user").populate("branchId");
 };
 
 

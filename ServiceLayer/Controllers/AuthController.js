@@ -175,11 +175,37 @@ const uploadProfilePicture = async (req, res) => {
   }
 };
 
+const updatepassword = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
+    const user = await UserRepository.findUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isCurrentPasswordValid) {
+      return res.status(400).json({ message: "Current password is incorrect" });
+    } else {    
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      await UserRepository.updateUser(userId, { password: hashedNewPassword });
+      return res.json({ message: "Password updated successfully" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error updating password", error: error.message });
+  } 
+
+};
+
+
+
 
 module.exports = {
   register,
   login,
   getProfile,
   updateProfile,
-  uploadProfilePicture
+  uploadProfilePicture,
+  updatepassword,
 };

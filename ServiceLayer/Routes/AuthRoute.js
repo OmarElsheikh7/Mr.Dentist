@@ -8,7 +8,9 @@ const router = express.Router();
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 router.get("/profile", protect, authorizeRoles("patient", "doctor","admin"), AuthController.getProfile);
-router.put("/profile", protect, authorizeRoles("patient", "doctor"), AuthController.updateProfile);
-router.put("/profile/upload-picture", protect, authorizeRoles("patient", "doctor"),uploadMiddleware.single("profilePicture"), AuthController.uploadProfilePicture);
+router.put("/profile", protect, authorizeRoles("patient", "doctor","admin"), AuthController.updateProfile);
+router.put("/profile/upload-picture", protect, authorizeRoles("patient", "doctor","admin"),uploadMiddleware.single("profilePicture"), AuthController.uploadProfilePicture);
+router.patch("/profile/updatepassword", protect, authorizeRoles("patient", "doctor","admin"), AuthController.updatepassword);
+
 
 module.exports = router;
