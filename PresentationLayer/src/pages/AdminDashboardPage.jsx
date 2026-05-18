@@ -481,10 +481,7 @@ const AdminDashboardPage = () => {
                   </td>
 
                   <td>
-                    {branches.find(
-                      (branch) =>
-                        String(branch._id) === String(doctor.branchId),
-                    )?.address || "Unknown"}
+                    {doctor.branchId?.address}
                   </td>
 
                   <td>
