@@ -76,7 +76,7 @@ const deleteDoctor = async (doctorId) => {
 };
 
 const findDoctorByUserId = async (userId) => {
-  return await Doctor.findOne({ user: userId }).populate("user").populate("branchId");;
+  return await Doctor.findOne({ user: userId }).populate("user").populate("branchId");
 };
 
 const findDoctorById = async (doctorId) => {

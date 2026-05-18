@@ -1,32 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDoctor } from "../hooks/useDoctor"; // Adjust this path if your hooks folder is located elsewhere
 import "./LandingPage.css";
 import projectLogo from '../pages/projectlogo.png';
 
 const services = [
   { id: 1, title: "General Dentistry", desc: "Routine checkups, cleanings, and fillings to keep your smile healthy." },
-  { id: 2,  title: "Teeth Whitening", desc: "Professional whitening treatments to brighten your smile instantly." },
-  { id: 3,  title: "Orthodontics", desc: "Braces and aligners to straighten teeth for all ages." },
-  { id: 4,  title: "Dental Implants", desc: "Permanent solutions for missing teeth with a natural look and feel." }
+  { id: 2, title: "Teeth Whitening", desc: "Professional whitening treatments to brighten your smile instantly." },
+  { id: 3, title: "Orthodontics", desc: "Braces and aligners to straighten teeth for all ages." },
+  { id: 4, title: "Dental Implants", desc: "Permanent solutions for missing teeth with a natural look and feel." }
 ];
-
-
-const doctors = [
-  { id: 1, name: "Dr. Sarah Ahmed", specialty: "Orthodontics", shift: "Sun–Thu 9AM–3PM", fee: 500 },
-  { id: 2, name: "Dr. Mohamed Ali", specialty: "Teeth Whitening", shift: "Mon–Fri 2PM–8PM", fee: 300 },
-  { id: 3, name: "Dr. Nour Hassan", specialty: "General Dentistry", shift: "Sat–Wed 10AM–4PM", fee: 250 },
-];
-
-const branches = [
-  { id: 1, city: "Cairo", address: "15 Tahrir Square, Downtown Cairo", phone: "011111111" },
-  { id: 2, city: "Giza", address: "88 Pyramids Road, Giza", phone: "0" },
-  { id: 3, city: "Alexandria", address: "22 Corniche Street, Alexandria", phone: "022222222" },
-];
-
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Initialize the updated custom hook
+  const { 
+    doctorsList, 
+    branchesList, 
+    loading, 
+    getAllDoctors, 
+    getAllBranches 
+  } = useDoctor();
+
+  // Fetch data dynamically from the MongoDB database when the page mounts
+  useEffect(() => {
+    getAllDoctors();
+    getAllBranches();
+  }, [getAllDoctors, getAllBranches]);
 
   // Check if user is logged in (will come from AuthContext later)
   const isLoggedIn = false;
@@ -44,18 +46,26 @@ const LandingPage = () => {
     setMenuOpen(false);
   };
 
+  // Helper mapping to translate numeric DB shiftIDs to clean user strings
+  const mapShift = (shiftID) => {
+    switch(shiftID) {
+      case 0: return "Morning Shift (9AM - 3PM)";
+      case 1: return "Evening Shift (3PM - 9PM)";
+      case 2: return "Night Shift (9PM - 3AM)";
+      default: return "Flexible Shift";
+    }
+  };
+
   return (
     <div className="landing">
 
       <nav className="navbar">
         <div className="navbar-inner">
+          <div className="navbar-logo">
+            <img src={projectLogo} alt="Mr. Dentist" className="logo-img" />
+            <span className="logo-text"> Mr. Dentist</span>
+          </div>
 
-<div className="navbar-logo">
-  <img src={projectLogo} alt="Mr. Dentist" className="logo-img" />
-  <span className="logo-text"> Mr. Dentist</span>
-</div>
-
-         
           <ul className="nav-links">
             <li><button onClick={() => scrollTo("services")}>Services</button></li>
             <li><button onClick={() => scrollTo("doctors")}>Doctors</button></li>
@@ -66,7 +76,7 @@ const LandingPage = () => {
                 className="nav-protected"
                 onClick={() => handleProtectedAction("/appointments")}
               >
-                Book Appointmenet
+                Book Appointment
               </button>
             </li>
           </ul>
@@ -95,27 +105,27 @@ const LandingPage = () => {
       </nav>
 
       <section className="hero">
-  <div className="hero-content">
-    <p className="hero-tag">Welcome to Mr. Dentist</p>
-    <h1 className="hero-title">Crafting Confident Smiles <span>With Precision</span></h1>
-    <p className="hero-subtitle">
-      Experience world-class dental care. Where advanced technology meets unparalleled expertise to give you the perfect smile you deserve.
-    </p>
-    <div className="hero-actions">
-      <button className="btn-solid large" onClick={() => handleProtectedAction("/appointments")}>
-        Book an Appointment
-      </button>
-      <button className="btn-outline large" onClick={() => scrollTo("services")}>
-        Explore Services
-      </button>
-    </div>
-    <p className="hero-note">Login required to book appointments or write reviews</p>
-  </div>
+        <div className="hero-content">
+          <p className="hero-tag">Welcome to Mr. Dentist</p>
+          <h1 className="hero-title">Crafting Confident Smiles <span>With Precision</span></h1>
+          <p className="hero-subtitle">
+            Experience world-class dental care. Where advanced technology meets unparalleled expertise to give you the perfect smile you deserve.
+          </p>
+          <div className="hero-actions">
+            <button className="btn-solid large" onClick={() => handleProtectedAction("/appointments")}>
+              Book an Appointment
+            </button>
+            <button className="btn-outline large" onClick={() => scrollTo("services")}>
+              Explore Services
+            </button>
+          </div>
+          <p className="hero-note">Login required to book appointments or write reviews</p>
+        </div>
 
-  <div className="hero-image-container">
-    <img src={projectLogo} alt="Mr. Dentist Hero" className="hero-img" />
-  </div>
-</section>
+        <div className="hero-image-container">
+          <img src={projectLogo} alt="Mr. Dentist Hero" className="hero-img" />
+        </div>
+      </section>
 
       <section className="section" id="services">
         <div className="section-inner">
@@ -124,7 +134,6 @@ const LandingPage = () => {
           <div className="services-grid">
             {services.map((s) => (
               <div className="service-card" key={s.id}>
-                <span className="service-icon">{s.icon}</span>
                 <h3>{s.title}</h3>
                 <p>{s.desc}</p>
               </div>
@@ -138,24 +147,32 @@ const LandingPage = () => {
           <h2 className="section-heading">Meet Our Specialists</h2>
           <p className="section-sub">World-class professionals committed to your care</p>
           <div className="doctors-grid">
-            {doctors.map((doc) => (
-              <div className="doctor-card" key={doc.id}>
-                {/* Replace with real photo later */}
-                <div className="doctor-avatar"></div>
-                <h3 className="doctor-name">{doc.name}</h3>
-                <p className="doctor-specialty">{doc.specialty}</p>
-                <div className="doctor-details">
-                  <p>{doc.shift}</p>
-                  <p>{doc.fee} EGP / session</p>
+            {loading ? (
+              <p>Loading real-time doctor listings...</p>
+            ) : doctorsList.length > 0 ? (
+              doctorsList.map((doc) => (
+                <div className="doctor-card" key={doc._id}>
+                  <div className="doctor-avatar"></div>
+                  {/* Safely accesses the populated user account object, fallback to specialty label */}
+                  <h3 className="doctor-name">
+                    {doc.user && doc.user.name ? `Dr. ${doc.user.name}` : `Specialist Doctor`}
+                  </h3>
+                  <p className="doctor-specialty">{doc.specialty}</p>
+                  <div className="doctor-details">
+                    <p>{mapShift(doc.shiftID)}</p>
+                    <p>{doc.consultationFee} EGP / session</p>
+                  </div>
+                  <button
+                    className="btn-solid full"
+                    onClick={() => handleProtectedAction("/appointments")}
+                  >
+                    Book with This Specialist
+                  </button>
                 </div>
-                <button
-                  className="btn-solid full"
-                  onClick={() => handleProtectedAction("/appointments")}
-                >
-                  Book with {doc.name.split(" ")[1]}
-                </button>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>No specialist listings available right now.</p>
+            )}
           </div>
         </div>
       </section>
@@ -165,13 +182,22 @@ const LandingPage = () => {
           <h2 className="section-heading">Clinic Locations</h2>
           <p className="section-sub">Luxurious and modern facilities across Egypt</p>
           <div className="branches-grid">
-            {branches.map((b) => (
-              <div className="branch-card" key={b.id}>
-                <h3 className="branch-city"> {b.city}</h3>
-                <p>{b.address}</p>
-                <p>{b.phone}</p>
-              </div>
-            ))}
+            {loading ? (
+              <p>Loading closest clinic branches...</p>
+            ) : branchesList.length > 0 ? (
+              branchesList.map((b) => (
+                <div className="branch-card" key={b._id}>
+                  {/* Parses the address field to split a major city flag from full location descriptors */}
+                  <h3 className="branch-city">
+                    {b.address.includes(",") ? b.address.split(",").pop().trim() : "Clinic Location"}
+                  </h3>
+                  <p><strong>Address:</strong> {b.address}</p>
+                  <p><strong>Phone:</strong> {b.phoneNumber || "No contact line available"}</p>
+                </div>
+              ))
+            ) : (
+              <p>No clinics are active at this moment.</p>
+            )}
           </div>
         </div>
       </section>
@@ -185,20 +211,20 @@ const LandingPage = () => {
               simple mission to make high-quality dental care accessible to everyone.
             </p>
             <p>
-              Over the years we have grown to 3 branches across Egypt, a team of
-              over 20 specialist doctors, and tens of thousands of happy patients.
+              Over the years we have grown to multiple branches across Egypt, a team of
+              top tier specialist doctors, and tens of thousands of happy patients.
             </p>
             <p>
-             you're in safe hands with Mr.Dentist.
+              You are always in safe hands with Mr.Dentist.
             </p>
             <div className="about-stats">
               <div className="about-stat">
-                <span className="stat-big">20+</span>
+                <span className="stat-big">{doctorsList.length || "20+"}</span>
                 <span>Specialist Doctors</span>
               </div>
               <div className="about-stat">
-                <span className="stat-big">3</span>
-                <span>Branches</span>
+                <span className="stat-big">{branchesList.length || "3"}</span>
+                <span>Active Branches</span>
               </div>
               <div className="about-stat">
                 <span className="stat-big">50k+</span>
@@ -206,15 +232,15 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-         <div className="about-image-placeholder">
-  <div className="about-img-box" style={{ background: 'transparent' }}>
-    <img 
-      src={projectLogo} 
-      alt="Logo" 
-      style={{ width: '300px', height: 'auto', objectFit: 'contain' }} 
-    />
-  </div>
-</div>
+          <div className="about-image-placeholder">
+            <div className="about-img-box" style={{ background: 'transparent' }}>
+              <img 
+                src={projectLogo} 
+                alt="Logo" 
+                style={{ width: '300px', height: 'auto', objectFit: 'contain' }} 
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -226,6 +252,7 @@ const LandingPage = () => {
             className="btn-solid large"
             onClick={() => handleProtectedAction("/reviews")}
           >
+            Write a Review
           </button>
           <p className="hero-note"> Login required to write a review</p>
         </div>

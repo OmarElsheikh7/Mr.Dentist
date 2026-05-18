@@ -21,8 +21,8 @@ const DashboardPage = () => {
         };
 
         const [apptRes, reviewRes] = await Promise.all([
-          fetch("http://localhost:5000/api/appointments", { headers }),
-          fetch("http://localhost:5000/api/reviews", { headers })
+          fetch("http://localhost:5000/api/appointments/patient/appointments", { headers }),
+          fetch("http://localhost:5000/api/patients/reviews", { headers })
         ]);
 
         if (apptRes.ok) {
@@ -107,9 +107,6 @@ const DashboardPage = () => {
               {/* Top row: doctor name and status badge */}
               <div className="card-top">
                 <span className="card-title">{appt.doctor}</span>
-                <span className={`status-badge ${appt.status.toLowerCase()}`}>
-                  {appt.status}
-                </span>
               </div>
 
               {/* Appointment details */}
@@ -117,16 +114,6 @@ const DashboardPage = () => {
               <p className="card-detail">Date: {appt.dateTime}</p>
               <p className="card-detail">Branch: {appt.branch}</p>
               <p className="card-detail">Cost: {appt.totalCost} EGP</p>
-
-              {/* Show review button only on completed appointments */}
-              {appt.status === "Completed" && (
-                <button
-                  className="review-btn"
-                  onClick={() => navigate("/reviews")}
-                >
-                  Write a review about this appointment
-                </button>
-              )}
 
             </div>
           ))}

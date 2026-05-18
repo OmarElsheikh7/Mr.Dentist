@@ -7,6 +7,8 @@ export const useDoctor = () => {
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [doctorsList, setDoctorsList] = useState([]);
+  const [branchesList, setBranchesList] = useState([]);
 
   
   const getHeaders = useCallback(() => {
@@ -133,53 +135,62 @@ export const useDoctor = () => {
     }
   };
 
-  const uploadProfilePicture = async (file) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setError("No token found. Please log in.");
-      return { success: false };
-    }
-
+  const getAllDoctors = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const formData = new FormData();
-      // "profilePicture" must match the name expected by your backend Multer setup
-      formData.append("profilePicture", file); 
-
-      const response = await fetch(`${BASE_URL}/auth/profile/upload-picture`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          // DO NOT manually set Content-Type here. The browser sets it for FormData automatically.
-        },
-        body: formData,
+      const response = await fetch(`${BASE_URL}/doctors`, {
+        method: "GET",
       });
-
       const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.message || "Failed to upload picture");
+        throw new Error(data.message || "Failed to fetch doctors");
       }
-
-      // Update the local state so the UI reflects the new image immediately
-      setDoctor((prev) => ({ ...prev, pictureUrl: data.pictureUrl }));
-      return { success: true, pictureUrl: data.pictureUrl };
+      setDoctorsList(data.data || data);
     } catch (err) {
       setError(err.message);
-      return { success: false, error: err.message };
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  const getAllBranches = useCallback(async () => {
+    const headers = getHeaders();
+    if (!headers) {
+      setError("No token found. Please log in.");
+      return;
+    }
+    
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${BASE_URL}/clinic-branches`, {
+        method: "GET",
+        headers: headers,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch branches");
+      }
+      setBranchesList(data.data || data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [getHeaders]);
+
 
   return { 
-    doctor, 
+    doctor,
+    doctorsList,
+    branchesList, 
     loading, 
     error, 
     getDashboardData, 
     getProfileData, 
     updateProfile,
-    uploadProfilePicture
+    getAllDoctors,
+    getAllBranches
   };
 };

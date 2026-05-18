@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../assets/styles/AdminDashboardPage.css";
+import { useNavigate } from "react-router-dom";
+
 
 const BASE_URL = "http://localhost:5000/api/doctors";
 
 const AdminDashboardPage = () => {
-
+  const navigate = useNavigate();
   const [doctorData, setDoctorData] = useState({
     name: "",
     email: "",
@@ -60,32 +62,27 @@ const AdminDashboardPage = () => {
   // FETCH BRANCHES
   
 
-  const fetchBranches = async () => {
-
+ const fetchBranches = async () => {
     try {
+      const token = localStorage.getItem("token"); // 1. Get the token
 
-      const response = await fetch(
-        "http://localhost:5000/api/clinicBranches"
-      );
+      const response = await fetch("http://localhost:5000/api/clinicBranches", {
+        headers: {
+          "Authorization": `Bearer ${token}`, // 2. Attach the token
+        },
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message);
+        throw new Error(data.message || "Failed to fetch branches");
       }
 
-      setBranches(
-        Array.isArray(data.data)
-          ? data.data
-          : []
-      );
+      setBranches(Array.isArray(data.data) ? data.data : []);
 
     } catch (error) {
-
-      console.error(error.message);
-
+      console.error("Error fetching branches:", error.message);
     }
-
   };
 
   // =========================
@@ -156,12 +153,15 @@ const AdminDashboardPage = () => {
 
       });
 
+
+
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message);
       }
 
+      
       alert(
         editId
           ? "Doctor updated successfully"
@@ -279,60 +279,42 @@ const AdminDashboardPage = () => {
   );
 
   return (
-
+    
     <div className="dashboard">
 
-      {/* HEADER */}
+      {/* HEADER WITH NEW PROFILE BUTTON LINK */}
       <div className="dashboard-header">
-
         <div>
-
-          <h1 className="dashboard-welcome">
-            Admin Dashboard
-          </h1>
-
-          <p className="dashboard-subtitle">
-            Manage Doctors
-          </p>
-
+          <h1 className="dashboard-welcome">Admin Dashboard</h1>
+          <p className="dashboard-subtitle">Manage Doctors</p>
         </div>
 
-        <div className="dashboard-stats">
+        <div className="dashboard-header-actions">
+          <button 
+            type="button" 
+            className="dashboard-profile-btn"
+            onClick={() => navigate("/admin-profile")}
+          >
+            Go to Profile
+          </button>
 
-          <div className="stat-box">
-
-            <span className="stat-number">
-              {doctors.length}
-            </span>
-
-            <span className="stat-label">
-              Doctors
-            </span>
-
+          <div className="dashboard-stats">
+            <div className="stat-box">
+              <span className="stat-number">{doctors.length}</span>
+              <span className="stat-label">Doctors</span>
+            </div>
           </div>
-
         </div>
-
       </div>
 
       {/* FORM */}
       <div className="dashboard-section">
-
         <h2 className="section-title">
-
-          {editId
-            ? "Update Doctor"
-            : "Create Doctor"}
-
+          {editId ? "Update Doctor" : "Create Doctor"}
         </h2>
 
-        <form
-          className="admin-form"
-          onSubmit={handleSubmit}
-        >
-
+        <form className="admin-form" onSubmit={handleSubmit}>
           <div className="form-grid">
-
             <input
               type="text"
               name="name"
@@ -393,22 +375,15 @@ const AdminDashboardPage = () => {
               required
             >
 
-              <option value="">
+               <option value="" disabled hidden>
                 Select Shift
               </option>
 
-              <option value={0}>
-                Morning (08:00 - 16:00)
-              </option>
+              <option value={0}>Morning (08:00 - 16:00)</option>
 
-              <option value={1}>
-                Afternoon (16:00 - 00:00)
-              </option>
+              <option value={1}>Afternoon (16:00 - 00:00)</option>
 
-              <option value={2}>
-                Night (00:00 - 08:00)
-              </option>
-
+              <option value={2}>Night (00:00 - 08:00)</option>
             </select>
 
             {/* DYNAMIC BRANCHES */}
@@ -418,22 +393,16 @@ const AdminDashboardPage = () => {
               onChange={handleChange}
               required
             >
-
-              <option value="">
+              {/* Add disabled and optionally hidden here */}
+              <option value="" disabled hidden>
                 Select Branch
               </option>
 
               {branches.map((branch) => (
-
-                <option
-                  key={branch._id}
-                  value={branch._id}
-                >
-                  {branch.address}
+                <option key={branch._id} value={branch._id}>
+                  {branch.address.toString()}
                 </option>
-
               ))}
-
             </select>
 
             <select
@@ -442,19 +411,14 @@ const AdminDashboardPage = () => {
               onChange={handleChange}
               required
             >
-
-              <option value="">
+               <option value="" disabled hidden>
                 Select Gender
               </option>
 
-              <option value="male">
-                Male
-              </option>
 
-              <option value="female">
-                Female
-              </option>
+              <option value="male">Male</option>
 
+              <option value="female">Female</option>
             </select>
 
             <input
@@ -464,34 +428,21 @@ const AdminDashboardPage = () => {
               onChange={handleChange}
               required
             />
-
           </div>
 
           <button className="action-btn primary">
-
-            {editId
-              ? "Update Doctor"
-              : "Create Doctor"}
-
+            {editId ? "Update Doctor" : "Create Doctor"}
           </button>
-
         </form>
-
       </div>
 
       {/* DOCTORS TABLE */}
       <div className="dashboard-section">
-
-        <h2 className="section-title">
-          Doctors
-        </h2>
+        <h2 className="section-title">Doctors</h2>
 
         <div className="table-wrapper">
-
           <table className="doctor-table">
-
             <thead>
-
               <tr>
                 <th>Name</th>
                 <th>Specialty</th>
@@ -502,15 +453,11 @@ const AdminDashboardPage = () => {
                 <th>Branch</th>
                 <th>Actions</th>
               </tr>
-
             </thead>
 
             <tbody>
-
               {currentDoctors.map((doctor) => (
-
                 <tr key={doctor._id}>
-
                   <td>{doctor.user.name}</td>
 
                   <td>
@@ -521,40 +468,27 @@ const AdminDashboardPage = () => {
 
                   <td>{doctor.user.email}</td>
 
-                  <td>
-                    {doctor.consultationFee} EGP
-                  </td>
+                  <td>{doctor.consultationFee} EGP</td>
 
                   <td>{doctor.user.gender}</td>
 
                   <td>
-
-                    {
-                      doctor.shiftID === 0
-                        ? "Morning"
-                        : doctor.shiftID === 1
+                    {doctor.shiftID === 0
+                      ? "Morning"
+                      : doctor.shiftID === 1
                         ? "Afternoon"
-                        : "Night"
-                    }
-
+                        : "Night"}
                   </td>
 
                   <td>
-
-                    {
-                      branches.find(
-                        (branch) =>
-                          String(branch._id) ===
-                          String(doctor.branchId)
-                      )?.address || "Unknown"
-                    }
-
+                    {branches.find(
+                      (branch) =>
+                        String(branch._id) === String(doctor.branchId),
+                    )?.address || "Unknown"}
                   </td>
 
                   <td>
-
                     <div className="doctor-actions">
-
                       <button
                         className="action-btn secondary"
                         onClick={() => handleEdit(doctor)}
@@ -568,68 +502,46 @@ const AdminDashboardPage = () => {
                       >
                         Delete
                       </button>
-
                     </div>
-
                   </td>
-
                 </tr>
-
               ))}
-
             </tbody>
-
           </table>
-
         </div>
 
         {/* PAGINATION */}
         <div className="pagination">
-
           <button
             className="page-btn"
             disabled={currentPage === 1}
-            onClick={() =>
-              setCurrentPage((prev) => prev - 1)
-            }
+            onClick={() => setCurrentPage((prev) => prev - 1)}
           >
             Prev
           </button>
 
           {[...Array(totalPages)].map((_, index) => (
-
             <button
               key={index}
               className={
-                currentPage === index + 1
-                  ? "page-btn active"
-                  : "page-btn"
+                currentPage === index + 1 ? "page-btn active" : "page-btn"
               }
-              onClick={() =>
-                setCurrentPage(index + 1)
-              }
+              onClick={() => setCurrentPage(index + 1)}
             >
               {index + 1}
             </button>
-
           ))}
 
           <button
             className="page-btn"
             disabled={currentPage === totalPages}
-            onClick={() =>
-              setCurrentPage((prev) => prev + 1)
-            }
+            onClick={() => setCurrentPage((prev) => prev + 1)}
           >
             Next
           </button>
-
         </div>
-
       </div>
-
     </div>
-
   );
 
 };

@@ -183,9 +183,7 @@ const AppointmentForm = ({ isBooked, setIsBooked }) => {
               {loadingDoctors ? "Loading doctors..." : "-- Select Doctor --"}
             </option>
             {doctors.map((doc) => (
-              // doc._id  → Mongo ObjectId used as :id in all routes
-              // doc.user.name → display name (user ref is populated)
-              // doc.specialty → shown alongside name for clarity
+
               <option key={doc._id} value={doc._id}>
                 {doc.user?.name} — {doc.specialty}
               </option>
@@ -205,8 +203,8 @@ const AppointmentForm = ({ isBooked, setIsBooked }) => {
             name="date"
             value={formData.date}
             onChange={handleChange}
-            min={minDate} // Restricts to today or later
-            max={maxDate} // Restricts to 6 months from today
+            min={minDate} 
+            max={maxDate} 
             required
           />
         </div>

@@ -17,7 +17,7 @@ const register = async (req, res) => {
 
     const user = await UserRepository.createUser({
       name: req.body.name,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       password: hashedPassword,
       role: "patient",
       dateofBirth: req.body.dateofBirth,
@@ -41,7 +41,7 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await UserRepository.findUserByEmail(email);
+    const user = await UserRepository.findUserByEmail(email.toLowerCase());
 
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -95,7 +95,7 @@ const updateProfile = async (req, res) => {
     const userId = req.user.id;
     const userData = {
       name: req.body.name,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       dateofBirth: req.body.dateofBirth,
       pictureUrl: req.body.pictureUrl,
     };
@@ -146,24 +146,17 @@ const updateProfile = async (req, res) => {
 
 const uploadProfilePicture = async (req, res) => {
   try {
-    // 1. Check if Multer successfully caught the file
     if (!req.file) {
       return res.status(400).json({ message: "No image file provided" });
     }
 
     const userId = req.user.id;
-
-    // 2. Upload the file to Cloudinary
-    // We can just use a general "users" folder now since everyone is in the User table
     const imageUrl = await uploadToCloudinary(req.file.path, "mr_dentist/users");
 
-    // 3. Update the User table directly! 
-    // (You don't care if they are a patient or doctor here)
     const updatedUser = await UserRepository.updateUser(userId, {
       pictureUrl: imageUrl 
     });
 
-    // 4. Return the new image URL to the frontend
     return res.status(200).json({
       message: "Profile picture updated successfully",
       pictureUrl: imageUrl,

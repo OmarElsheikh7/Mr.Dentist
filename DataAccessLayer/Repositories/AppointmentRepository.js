@@ -25,7 +25,7 @@ const getAppointmentsByPatient = async (patientId) => {
       path: "user",
       select: "name",
     },
-  });
+  }).populate("branch");
 };
 
 const getAppointmentsByDoctor = async (doctorId) => {
@@ -36,7 +36,7 @@ const getAppointmentsByDoctor = async (doctorId) => {
       path: "user",
       select: "name",
     },
-  });
+  }).populate("branch");
 };
 
 

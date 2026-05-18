@@ -16,6 +16,7 @@ import DoctorsPage from './pages/DoctorsPage'
 import ReviewPage from './pages/ReviewPage'
 import NotFoundPage from './pages/NotFoundPage'
 import AdminDashboardPage from "./pages/AdminDashboardPage";
+import AdminProfile from "./pages/AdminProfile";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/admin"element={<AdminDashboardPage />}/>
+          <Route path="/admin-profile"element={<AdminProfile />}/>
 
           {/* Protected Routes */}
          

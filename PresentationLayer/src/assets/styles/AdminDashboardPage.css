@@ -1,6 +1,37 @@
-/* =========================
+/* ==========================================================================
+   ADMIN LAYOUT HEADER
+   ========================================================================== */
+
+.dashboard-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard-profile-btn {
+  background-color: var(--blue-mid);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37, 99, 168, 0.15);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.dashboard-profile-btn:hover {
+  background-color: var(--blue-dark);
+}
+
+.dashboard-profile-btn:active {
+  transform: scale(0.98);
+}
+
+/* ==========================================================================
    ADMIN FORM
-========================= */
+   ========================================================================== */
 
 .admin-form {
   background: var(--white);
@@ -11,9 +42,7 @@
 
 .form-grid {
   display: grid;
-  grid-template-columns:
-    repeat(auto-fill, minmax(240px, 1fr));
-
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
   margin-bottom: 20px;
 }
@@ -21,11 +50,8 @@
 .form-grid input,
 .form-grid select {
   padding: 12px;
-
   border: 1px solid #dbe4f0;
-
   border-radius: 8px;
-
   font-size: 0.95rem;
 }
 
@@ -35,18 +61,15 @@
   border-color: var(--blue-mid);
 }
 
-/* =========================
+/* ==========================================================================
    TABLE
-========================= */
+   ========================================================================== */
 
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
-
   background: var(--white);
-
   border-radius: var(--radius);
-
   box-shadow: var(--shadow);
 }
 
@@ -62,24 +85,17 @@
 
 .doctor-table th {
   text-align: left;
-
   padding: 16px;
-
   font-size: 0.95rem;
   font-weight: 700;
-
   color: var(--blue-dark);
-
   border-bottom: 1px solid #e5e7eb;
 }
 
 .doctor-table td {
   padding: 16px;
-
   border-bottom: 1px solid #f1f5f9;
-
   font-size: 0.92rem;
-
   color: var(--grey-mid);
 }
 
@@ -91,9 +107,9 @@
   background: #f8fafc;
 }
 
-/* =========================
+/* ==========================================================================
    BUTTONS
-========================= */
+   ========================================================================== */
 
 .doctor-actions {
   display: flex;
@@ -110,39 +126,30 @@
   background: #991b1b;
 }
 
-/* =========================
+/* ==========================================================================
    PAGINATION
-========================= */
+   ========================================================================== */
 
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-
   flex-wrap: wrap;
-
   gap: 10px;
-
   margin-top: 24px;
 }
 
 .page-btn {
   min-width: 40px;
   height: 40px;
-
   padding: 0 14px;
-
   border: none;
   border-radius: 10px;
-
   background: #e5e7eb;
   color: #1f2937;
-
   font-size: 0.95rem;
   font-weight: 600;
-
   cursor: pointer;
-
   transition: all 0.25s ease;
 }
 
@@ -154,10 +161,7 @@
 .page-btn.active {
   background: var(--blue-mid);
   color: white;
-
-  box-shadow:
-    0 4px 12px
-    rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .page-btn:disabled {
@@ -166,12 +170,11 @@
   transform: none;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
 
 @media (max-width: 768px) {
-
   .doctor-table {
     min-width: 900px;
   }
@@ -183,10 +186,21 @@
   .page-btn {
     min-width: 36px;
     height: 36px;
-
     font-size: 0.85rem;
-
     padding: 0 10px;
   }
+}
 
+@media (max-width: 600px) {
+  .dashboard-header-actions {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .dashboard-profile-btn {
+    width: 100%;
+    text-align: center;
+  }
 }
