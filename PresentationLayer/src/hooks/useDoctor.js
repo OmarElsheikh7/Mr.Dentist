@@ -133,12 +133,53 @@ export const useDoctor = () => {
     }
   };
 
+  const uploadProfilePicture = async (file) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("No token found. Please log in.");
+      return { success: false };
+    }
+
+    setLoading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      // "profilePicture" must match the name expected by your backend Multer setup
+      formData.append("profilePicture", file); 
+
+      const response = await fetch(`${BASE_URL}/auth/profile/upload-picture`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          // DO NOT manually set Content-Type here. The browser sets it for FormData automatically.
+        },
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to upload picture");
+      }
+
+      // Update the local state so the UI reflects the new image immediately
+      setDoctor((prev) => ({ ...prev, pictureUrl: data.pictureUrl }));
+      return { success: true, pictureUrl: data.pictureUrl };
+    } catch (err) {
+      setError(err.message);
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return { 
     doctor, 
     loading, 
     error, 
     getDashboardData, 
     getProfileData, 
-    updateProfile 
+    updateProfile,
+    uploadProfilePicture
   };
 };
