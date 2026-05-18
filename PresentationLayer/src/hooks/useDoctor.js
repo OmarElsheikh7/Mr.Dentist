@@ -164,7 +164,7 @@ export const useDoctor = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${BASE_URL}/clinic-branches`, {
+      const response = await fetch(`${BASE_URL}/clinicBranches`, {
         method: "GET",
         headers: headers,
       });

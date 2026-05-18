@@ -188,8 +188,8 @@ const LandingPage = () => {
               branchesList.map((b) => (
                 <div className="branch-card" key={b._id}>
                   {/* Parses the address field to split a major city flag from full location descriptors */}
-                  <h3 className="branch-city">
-                    {b.address.includes(",") ? b.address.split(",").pop().trim() : "Clinic Location"}
+                  <h3 className="Branch Address">
+                    {b.address}
                   </h3>
                   <p><strong>Address:</strong> {b.address}</p>
                   <p><strong>Phone:</strong> {b.phoneNumber || "No contact line available"}</p>
