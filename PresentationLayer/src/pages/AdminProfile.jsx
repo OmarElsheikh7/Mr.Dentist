@@ -5,14 +5,17 @@ export default function AdminProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   
+  // Image Upload States
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [profileImageUrl, setProfileImageUrl] = useState(null);
+  
   // Component State Initialization
   const [formData, setFormData] = useState({
-    name: 'Alex Mercer',
-    email: 'alex.mercer@system.com',
-    adminId: '#ADM-9042',
-    tier: 'Root Access',
-    ipAddress: '192.168.1.45',
-    description: 'Responsible for managing infrastructure deployments, global user privileges, system audit monitoring, and database core configurations.'
+    name: 'Admin User',
+    email: 'admin@example.com',
+    Phone: '123-456-7890'
   });
 
   const handleInputChange = (e) => {
@@ -46,6 +49,34 @@ export default function AdminProfile() {
       .slice(0, 2);
   };
 
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!selectedImage) return;
+    
+    setIsUploadingImage(true);
+    try {
+      // Mocking an upload delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Creating a local URL to preview the selected image
+      const imageUrl = URL.createObjectURL(selectedImage);
+      setProfileImageUrl(imageUrl);
+      
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+      setSelectedImage(null);
+    } catch (err) {
+      console.error("Failed to upload image", err);
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
   return (
     <div className="profile-page">
       
@@ -73,9 +104,13 @@ export default function AdminProfile() {
         <div className="profile-card">
           <div className="profile-card-header">
             <div className="profile-avatar-container" style={{ margin: 0, width: '80px', height: '80px' }}>
-              <div className="profile-avatar-initials" style={{ fontSize: '2rem' }}>
-                {getInitials(formData.name)}
-              </div>
+              {profileImageUrl ? (
+                <img src={profileImageUrl} alt="Profile" className="profile-avatar-img" />
+              ) : (
+                <div className="profile-avatar-initials" style={{ fontSize: '2rem' }}>
+                  {getInitials(formData.name)}
+                </div>
+              )}
             </div>
             <div>
               <h2 className="profile-name">{formData.name}</h2>
@@ -88,22 +123,11 @@ export default function AdminProfile() {
               <span className="profile-label">Email Address</span>
               <span className="profile-value">{formData.email}</span>
             </div>
-            <div className="profile-row">
-              <span className="profile-label">Admin ID</span>
-              <span className="profile-value">{formData.adminId}</span>
-            </div>
-            <div className="profile-row">
-              <span className="profile-label">System Tier</span>
-              <span className="profile-shift-badge">{formData.tier}</span>
-            </div>
-            <div className="profile-row">
-              <span className="profile-label">Last Login IP</span>
-              <span className="profile-value">{formData.ipAddress}</span>
-            </div>
+        
             <div className="profile-row profile-row--description">
-              <span className="profile-label">Administrative Scope Description</span>
+              <span className="profile-label">Phone</span>
               <span className="profile-value profile-value--description">
-                {formData.description}
+                {formData.Phone}
               </span>
             </div>
           </div>
@@ -127,8 +151,24 @@ export default function AdminProfile() {
           <div className="profile-edit-section">
             <div className="profile-picture-upload">
               <h3>Update Profile Image</h3>
-              <input type="file" accept="image/*" />
-              <button type="button" className="upload-btn">Upload Avatar</button>
+              <input 
+                type="file" 
+                accept="image/*" 
+                onChange={handleImageChange}
+                disabled={isUploadingImage}
+              />
+              {selectedImage && (
+                <button 
+                  type="button" 
+                  className="upload-btn" 
+                  onClick={handleImageUpload}
+                  disabled={isUploadingImage}
+                  style={{ marginTop: '10px' }}
+                >
+                  {isUploadingImage ? "Uploading..." : "Upload Avatar"}
+                </button>
+              )}
+              {saveSuccess && <p style={{ color: '#16a34a', margin: '8px 0 0', fontSize: '0.9rem' }}>Image updated successfully!</p>}
             </div>
           </div>
           
@@ -147,7 +187,7 @@ export default function AdminProfile() {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Email Endpoint</label>
+            <label className="form-label">Email</label>
             <input 
               type="email" 
               className="form-input" 
@@ -157,25 +197,16 @@ export default function AdminProfile() {
               required
             />
           </div>
-
+  
           <div className="form-group">
-            <label className="form-label">Access Level Token</label>
+            <label className="form-label">Phone Number</label>
             <input 
-              type="text" 
-              className="form-input disabled" 
-              value="Super Admin Access (Read/Write/Execute)" 
-              disabled 
-            />
-            <span className="form-hint">Security clearance tokens are managed only via Master Root controls.</span>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Scope & Access Directives</label>
-            <textarea 
-              className="form-input form-textarea"
-              name="description"
-              value={formData.description}
+              type="tel" 
+              className="form-input" 
+              name="Phone"
+              value={formData.Phone} 
               onChange={handleInputChange}
+              required
             />
           </div>
 
