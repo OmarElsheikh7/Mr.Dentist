@@ -20,12 +20,12 @@ const deleteAppointment = async (appointmentId) => {
 const getAppointmentsByPatient = async (patientId) => {
   return await Appointment.find({ patient: patientId }).populate({
     path: "doctor",
-    select: "user",
+    select: "user specialty",
     populate: {
       path: "user",
       select: "name",
     },
-  }).populate("branch");
+  }).populate("branch")
 };
 
 const getAppointmentsByDoctor = async (doctorId) => {

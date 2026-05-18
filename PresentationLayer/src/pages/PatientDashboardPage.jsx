@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import "./DashboardPage.css" // patient styles;
+import "./DashboardPage.css"; // patient styles
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -76,7 +76,6 @@ const DashboardPage = () => {
         <h2 className="section-title">Quick Actions</h2>
         <div className="actions-row">
 
-          {/* Redirects to appointments booking page */}
           <button
             className="action-btn primary"
             onClick={() => navigate("/appointments")}
@@ -84,7 +83,6 @@ const DashboardPage = () => {
             Book Appointment
           </button>
 
-          {/* Redirects to patient profile page */}
           <button
             className="action-btn secondary"
             onClick={() => navigate("/profile")}
@@ -102,17 +100,27 @@ const DashboardPage = () => {
 
           {/* Loop through each appointment and render a card */}
           {appointments.map((appt) => (
-            <div className="card" key={appt.id}>
+            // FIX 1: Use _id to stop the key warning!
+            <div className="card" key={appt._id}>
 
-              {/* Top row: doctor name and status badge */}
               <div className="card-top">
-                <span className="card-title">{appt.doctor}</span>
+                {/* FIX 2: Dig into the object to get the string name! */}
+                <span className="card-title">
+                  {appt.doctor.user.name || "Unknown Doctor"}
+                </span>
               </div>
 
-              {/* Appointment details */}
-              <p className="card-detail">Specialty: {appt.specialty}</p>
-              <p className="card-detail">Date: {appt.dateTime}</p>
-              <p className="card-detail">Branch: {appt.branch}</p>
+              {/* FIX 3: Dig into specialty and branch objects safely! */}
+              <p className="card-detail">Specialty: {appt.doctor.specialty || "N/A"}</p>
+              
+              {/* Added the date formatter we talked about earlier! */}
+              <p className="card-detail">
+                Date: {appt.appointmentDate ? new Date(appt.appointmentDate).toLocaleDateString('en-US', {
+                  year: 'numeric', month: 'short', day: 'numeric'
+                }) : "N/A"}
+              </p>
+              
+              <p className="card-detail">Branch: {appt.branch?.address || "N/A"}</p>
               <p className="card-detail">Cost: {appt.totalCost} EGP</p>
 
             </div>
@@ -120,8 +128,6 @@ const DashboardPage = () => {
 
         </div>
       </div>
-
-     
 
     </div>
   );

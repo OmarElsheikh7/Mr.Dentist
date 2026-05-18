@@ -112,7 +112,9 @@ const { doctor, loading, error, getDashboardData } = useDoctor();
 
               {/* Appointment details */}
               <p className="card-detail">
-                Date: {appt.appointmentDate.split("T")[0]}
+                 Date: {appt.appointmentDate ? new Date(appt.appointmentDate).toLocaleDateString('en-US', {
+                  year: 'numeric', month: 'short', day: 'numeric'
+                }) : "N/A"}
               </p>
               <p className="card-detail">Branch: {appt.branch.address}</p>
               <p className="card-detail">Fee: {appt.totalCost} EGP</p>
