@@ -1,0 +1,824 @@
+openapi: 3.0.3
+info:
+  title: Mr. Dentist — Clinic Management API
+  description: |
+    RESTful API for the Mr. Dentist Clinic Management System.
+    Supports JWT-based authentication, role-based access control (Patient, Doctor, Admin),
+    multi-branch clinic management, shift-aware appointment booking, and patient review management.
+  version: 1.0.0
+  contact:
+    name: Mr. Dentist Dev Team
+
+servers:
+  - url: http://localhost:5000/api
+    description: Local Development Server
+
+tags:
+  - name: Auth
+    description: Registration, login, profile management, and password operations
+  - name: Doctors
+    description: Doctor CRUD and review retrieval
+  - name: Patients
+    description: Patient CRUD and review retrieval
+  - name: Clinic Branches
+    description: Clinic branch management (Admin only)
+  - name: Appointments
+    description: Booking, slot availability, and appointment management
+  - name: Reviews
+    description: Patient review creation and updates
+
+# ──────────────────────────── Security Schemes ────────────────────────────
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token obtained from `POST /auth/login`.
+        Payload contains `{ id, role }`. Include as `Authorization: Bearer <token>`.
+
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "664a1b2c3d4e5f6a7b8c9d0e"
+        name:
+          type: string
+          example: "Ahmed Hassan"
+        email:
+          type: string
+          format: email
+          example: "ahmed@example.com"
+        gender:
+          type: string
+          enum: [male, female]
+        role:
+          type: string
+          enum: [patient, doctor, admin]
+        dateofBirth:
+          type: string
+          format: date
+        pictureUrl:
+          type: string
+
+    Doctor:
+      type: object
+      properties:
+        _id:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+        branchId:
+          $ref: "#/components/schemas/ClinicBranch"
+        specialty:
+          type: string
+          example: "Orthodontics"
+        shiftID:
+          type: integer
+          enum: [0, 1, 2]
+          description: "0=Morning, 1=Afternoon, 2=Night"
+        consultationFee:
+          type: number
+          example: 300
+        description:
+          type: string
+
+    Patient:
+      type: object
+      properties:
+        _id:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+        phoneNumber:
+          type: string
+          example: "+201012345678"
+
+    ClinicBranch:
+      type: object
+      properties:
+        _id:
+          type: string
+        address:
+          type: string
+          example: "123 Main St, Cairo"
+        phoneNumber:
+          type: string
+          example: "+20221234567"
+
+    Appointment:
+      type: object
+      properties:
+        _id:
+          type: string
+        doctor:
+          type: string
+        patient:
+          type: string
+        branch:
+          type: string
+        totalCost:
+          type: number
+        appointmentDate:
+          type: string
+          format: date
+        shiftId:
+          type: integer
+          enum: [0, 1, 2]
+        slotTime:
+          type: string
+          pattern: "^([01]\\d|2[0-3]):[0-5]\\d$"
+          example: "09:00"
+        createdAt:
+          type: string
+          format: date-time
+
+    Review:
+      type: object
+      properties:
+        _id:
+          type: string
+        doctor:
+          type: string
+        patient:
+          type: string
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        comment:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+
+# ──────────────────────────── Paths ────────────────────────────
+
+paths:
+  # ─── Auth ───
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Register a new patient account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password, gender, dateofBirth, phoneNumber]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                gender:
+                  type: string
+                  enum: [male, female]
+                dateofBirth:
+                  type: string
+                  format: date
+                phoneNumber:
+                  type: string
+                pictureUrl:
+                  type: string
+      responses:
+        "201":
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: Email already in use
+        "500":
+          description: Server error
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Authenticate and receive JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  token:
+                    type: string
+                    description: JWT token
+                  data:
+                    $ref: "#/components/schemas/User"
+        "400":
+          description: Invalid email or password
+
+  /auth/profile:
+    get:
+      tags: [Auth]
+      summary: Get authenticated user profile
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Profile fetched successfully
+        "401":
+          description: Unauthorized
+        "404":
+          description: User not found
+    put:
+      tags: [Auth]
+      summary: Update authenticated user profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                dateofBirth:
+                  type: string
+                  format: date
+                pictureUrl:
+                  type: string
+                phoneNumber:
+                  type: string
+                  description: Patient only
+                description:
+                  type: string
+                  description: Doctor only
+      responses:
+        "200":
+          description: Profile updated successfully
+        "404":
+          description: Patient/Doctor not found
+
+  /auth/profile/upload-picture:
+    put:
+      tags: [Auth]
+      summary: Upload profile picture
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                profilePicture:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Profile picture updated
+        "400":
+          description: No image file provided
+
+  /auth/profile/updatepassword:
+    patch:
+      tags: [Auth]
+      summary: Update password
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentPassword, newPassword]
+              properties:
+                currentPassword:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        "200":
+          description: Password updated successfully
+        "400":
+          description: Current password is incorrect
+
+  # ─── Doctors ───
+  /doctors:
+    get:
+      tags: [Doctors]
+      summary: Get all doctors (public)
+      responses:
+        "200":
+          description: Doctors retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Doctor"
+        "404":
+          description: No doctors found
+    post:
+      tags: [Doctors]
+      summary: Create a new doctor (Admin)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password, gender, dateofBirth, specialty, consultationFee, shiftID, branchId]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                gender:
+                  type: string
+                  enum: [male, female]
+                dateofBirth:
+                  type: string
+                  format: date
+                specialty:
+                  type: string
+                consultationFee:
+                  type: number
+                shiftID:
+                  type: integer
+                  enum: [0, 1, 2]
+                branchId:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "201":
+          description: Doctor created successfully
+        "400":
+          description: Validation error
+
+  /doctors/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Doctors]
+      summary: Get doctor by ID (public)
+      responses:
+        "200":
+          description: Doctor retrieved
+        "404":
+          description: Doctor not found
+    put:
+      tags: [Doctors]
+      summary: Update doctor (Doctor/Admin)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                specialty:
+                  type: string
+                consultationFee:
+                  type: number
+                shiftID:
+                  type: integer
+                branchId:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Doctor updated
+    delete:
+      tags: [Doctors]
+      summary: Delete doctor (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Doctor deleted
+        "404":
+          description: Doctor not found
+
+  /doctors/reviews:
+    get:
+      tags: [Doctors]
+      summary: Get reviews for authenticated doctor
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Reviews retrieved
+
+  # ─── Patients ───
+  /patients:
+    post:
+      tags: [Patients]
+      summary: Create patient (Admin)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password, gender, dateofBirth, phoneNumber]
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                gender:
+                  type: string
+                dateofBirth:
+                  type: string
+                  format: date
+                phoneNumber:
+                  type: string
+      responses:
+        "201":
+          description: Patient created
+
+  /patients/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Patients]
+      summary: Get patient by ID (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Patient fetched
+        "404":
+          description: Patient not found
+    put:
+      tags: [Patients]
+      summary: Update patient (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Patient updated
+    delete:
+      tags: [Patients]
+      summary: Delete patient (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Patient deleted
+
+  /patients/reviews:
+    get:
+      tags: [Patients]
+      summary: Get reviews by authenticated patient
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Reviews fetched
+
+  # ─── Clinic Branches ───
+  /clinicBranches:
+    get:
+      tags: [Clinic Branches]
+      summary: List all branches (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Branches retrieved
+    post:
+      tags: [Clinic Branches]
+      summary: Create branch (Admin)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [address, phone]
+              properties:
+                address:
+                  type: string
+                phone:
+                  type: string
+      responses:
+        "201":
+          description: Branch created
+
+  /clinicBranches/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Clinic Branches]
+      summary: Get branch by ID (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Branch retrieved
+        "404":
+          description: Branch not found
+    put:
+      tags: [Clinic Branches]
+      summary: Update branch (Admin)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                phoneNumber:
+                  type: string
+      responses:
+        "200":
+          description: Branch updated
+    delete:
+      tags: [Clinic Branches]
+      summary: Delete branch (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Branch deleted
+
+  # ─── Appointments ───
+  /appointments/{doctorId}:
+    post:
+      tags: [Appointments]
+      summary: Book appointment with doctor (Patient)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: doctorId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [appointmentDate, slotTime]
+              properties:
+                appointmentDate:
+                  type: string
+                  format: date
+                slotTime:
+                  type: string
+                  pattern: "^([01]\\d|2[0-3]):[0-5]\\d$"
+                  example: "09:00"
+      responses:
+        "201":
+          description: Appointment booked
+        "400":
+          description: Slot already booked
+        "404":
+          description: Patient or Doctor not found
+
+  /appointments/Availableslots/{doctorId}:
+    post:
+      tags: [Appointments]
+      summary: Get available slots for a doctor (Patient/Admin)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: doctorId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [date]
+              properties:
+                date:
+                  type: string
+                  format: date
+      responses:
+        "200":
+          description: Available slots
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: string
+                    example: ["08:00", "08:20", "08:40"]
+
+  /appointments/patient/appointments:
+    get:
+      tags: [Appointments]
+      summary: Get patient's appointments (Patient)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Appointments retrieved
+
+  /appointments/doctor/appointments:
+    get:
+      tags: [Appointments]
+      summary: Get doctor's appointments (Doctor)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Appointments retrieved
+
+  /appointments/appointments/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      tags: [Appointments]
+      summary: Update appointment (Admin)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appointmentDate:
+                  type: string
+                  format: date
+                slotTime:
+                  type: string
+      responses:
+        "200":
+          description: Appointment updated
+        "404":
+          description: Appointment not found
+    delete:
+      tags: [Appointments]
+      summary: Delete appointment (Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Appointment deleted
+
+  # ─── Reviews ───
+  /reviews/{doctorId}:
+    post:
+      tags: [Reviews]
+      summary: Create review for a doctor (Patient)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: doctorId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rating]
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                comment:
+                  type: string
+      responses:
+        "201":
+          description: Review created
+        "400":
+          description: Already reviewed this doctor
+
+  /reviews/{reviewId}:
+    put:
+      tags: [Reviews]
+      summary: Update own review (Patient)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                comment:
+                  type: string
+      responses:
+        "200":
+          description: Review updated
+        "403":
+          description: Review access denied
