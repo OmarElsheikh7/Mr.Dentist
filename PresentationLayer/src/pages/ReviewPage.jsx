@@ -1,111 +1,153 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ReviewAbout from "../components/doctors/ReviewAbout";
-import "../assets/styles/Reviews.css";
+import useReviews from "../hooks/useReviews"; 
+import "../assets/styles/Review.css"; 
 
 const ReviewPage = () => {
   const navigate = useNavigate();
+  const { bookedDoctors, loadingAppointments, appointmentsError, submitReview } = useReviews();
 
-  // Hardcoded submitted reviews — will come from GET /api/reviews later
-  const [submittedReviews, setSubmittedReviews] = useState([
-    {
-      id: 1,
-      doctor: "Dr. Mohamed Ali",
-      specialty: "Teeth Whitening",
-      rating: 5,
-      comment: "Excellent service!",
-      createdAt: "2026-04-21",
-    },
-  ]);
+  const [selectedDoctorId, setSelectedDoctorId] = useState("");
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  // Receives new review from ReviewAbout and adds it to the submitted list
-  const handleNewReview = (newReview) => {
-    setSubmittedReviews((prev) => [...prev, newReview]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedDoctorId) {
+      setSubmitError("Please select a doctor to review.");
+      return;
+    }
+
+    setSubmitting(true);
+    setSubmitError("");
+
+    try {
+      // Calls POST http://localhost:5000/api/reviews/${selectedDoctorId}
+      await submitReview(selectedDoctorId, { rating: Number(rating), comment });
+      navigate("/dashboard"); 
+    } catch (err) {
+      setSubmitError(err.message || "Failed to submit review.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  // Helper: render star emojis from numeric rating
-  const renderStars = (rating) => "⭐".repeat(rating);
+  if (loadingAppointments) return <div className="review-empty-msg">Checking your appointment history...</div>;
+  if (appointmentsError) return <div className="review-empty-msg" style={{color: 'red'}}>Error: {appointmentsError}</div>;
 
   return (
     <div className="review-page">
-
-      {/* ===== HEADER ===== */}
+      {/* Header section matches your CSS layout completely */}
       <div className="header">
-        <div className="container">
-          <h1>Reviews</h1>
+        <div className="container" style={{ padding: "0 60px" }}>
+          <h1>Share Feedback</h1>
           <p>
-            <span onClick={() => navigate("/")}>Home</span> /&nbsp;
-            <span onClick={() => navigate("/dashboard")}>Dashboard</span> / Reviews
+            Help others by rating your specialist. Or click here to{" "}
+            <span onClick={() => navigate("/dashboard")}>Go Back to Dashboard</span>
           </p>
         </div>
       </div>
 
-      {/* ===== FORM SECTION ===== */}
+      {/* Form container section mapping to your layout properties */}
       <div className="form-section">
-        <div className="container">
+        <h2>Write a Review</h2>
+        <p className="review-subtitle">Select a professional you have visited before from your history</p>
 
-          {/* ── PART 1: Write a review ── */}
-          <h2>Write a Review</h2>
-          <p className="review-subtitle">
-            Select a completed appointment below to share your experience.
-          </p>
+        {submitError && (
+          <div className="review-empty-msg" style={{ color: "#721c24", backgroundColor: "#f8d7da", marginBottom: "20px" }}>
+            {submitError}
+          </div>
+        )}
 
-          {/* ReviewAbout handles appointment list + inline forms */}
-          <ReviewAbout onReviewSubmit={handleNewReview} />
+        {bookedDoctors.length === 0 ? (
+          <div className="review-empty-msg">
+            You don't have any past completed appointments with doctors to review yet.
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="review-inline-form">
+            
+            {/* Select Doctor Menu */}
+            <div style={{ marginBottom: "20px" }}>
+              <label htmlFor="doctor-select">Choose Doctor</label>
+              <select
+                id="doctor-select"
+                className="form-select"
+                value={selectedDoctorId}
+                onChange={(e) => setSelectedDoctorId(e.target.value)}
+                required
+              >
+                <option value="">-- Select a Doctor --</option>
+                {bookedDoctors.map((doc) => {
+                  const docId = doc._id || doc.id;
+                  const docName = doc.user?.name || "Unknown Doctor";
+                  const specialty = doc.specialty || "Dental Specialist";
 
-          {/* ── PART 2: Submitted reviews ── */}
-          <h2 className="mt-5">My Submitted Reviews</h2>
-          <p className="review-subtitle">
-            All the reviews you have submitted so far.
-          </p>
-
-          {submittedReviews.length === 0 ? (
-            <p className="review-empty-msg">
-              You have not submitted any reviews yet.
-            </p>
-          ) : (
-            <div className="row">
-              {submittedReviews.map((review) => (
-                <div className="col-md-6 col-lg-4 mb-4" key={review.id}>
-                  <div className="review-card">
-
-                    {/* Doctor name + stars */}
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <span className="fw-bold" style={{ color: "#1a1a2e", fontSize: "16px" }}>
-                        {review.doctor}
-                      </span>
-                      <span style={{ fontSize: "14px" }}>
-                        {renderStars(review.rating)}
-                      </span>
-                    </div>
-
-                    {/* Specialty */}
-                    <p className="mb-2" style={{ color: "#3aa0b0", fontSize: "13px", fontWeight: "500" }}>
-                      {review.specialty}
-                    </p>
-
-                    {/* Comment */}
-                    <p className="review-card-comment">"{review.comment}"</p>
-
-                    {/* Footer: date + numeric rating badge */}
-                    <div className="d-flex justify-content-between align-items-center mt-2">
-                      <span style={{ fontSize: "13px", color: "#85898c" }}>
-                        📅 {review.createdAt}
-                      </span>
-                      <span className="review-rating-badge">
-                        {review.rating} / 5
-                      </span>
-                    </div>
-
-                  </div>
-                </div>
-              ))}
+                  return (
+                    <option key={docId} value={docId}>
+                      Dr. {docName} ({specialty})
+                    </option>
+                  );
+                })}
+              </select>
             </div>
-          )}
 
-        </div>
+            {/* Select Rating Value */}
+            <div style={{ marginBottom: "20px" }}>
+              <label htmlFor="rating-select">Rating Status</label>
+              <select
+                id="rating-select"
+                className="form-select"
+                value={rating}
+                onChange={(e) => setRating(e.target.value)}
+              >
+                <option value="5">5 / 5 Stars — Excellent Experience</option>
+                <option value="4">4 / 5 Stars — Very Good Care</option>
+                <option value="3">3 / 5 Stars — Good / Satisfactory</option>
+                <option value="2">2 / 5 Stars — Fair</option>
+                <option value="1">1 / 5 Stars — Unacceptable Service</option>
+              </select>
+            </div>
+
+            {/* Comment Area Box */}
+            <div style={{ marginBottom: "24px" }}>
+              <label htmlFor="comment-box">Your Feedback Details</label>
+              <textarea
+                id="comment-box"
+                className="form-control"
+                rows="5"
+                placeholder="Describe your clinic appointment experience..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Execution Actions Component Line */}
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button 
+                type="submit" 
+                className="action-btn primary" 
+                style={{ height: "45px", padding: "0 24px", border: "none", borderRadius: "6px", cursor: "pointer", backgroundColor: "#3aa0b0", color: "white", fontWeight: "600" }}
+                disabled={submitting}
+              >
+                {submitting ? "Submitting..." : "Submit Review"}
+              </button>
+              
+              <button 
+                type="button" 
+                className="action-btn secondary" 
+                style={{ height: "45px", padding: "0 24px", border: "1px solid #ced4da", borderRadius: "6px", cursor: "pointer", backgroundColor: "white", color: "#555" }}
+                onClick={() => navigate("/dashboard")}
+              >
+                Cancel
+              </button>
+            </div>
+
+          </form>
+        )}
       </div>
-
     </div>
   );
 };

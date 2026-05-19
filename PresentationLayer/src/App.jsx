@@ -35,7 +35,7 @@ function App() {
 
           {/* Protected Routes */}
          
-          <Route path="/reviews" element={<ReviewPage />} />
+          <Route path="/review" element={<ReviewPage />} />
           <Route path="/dashboard" element={<DashboardPage/>}/>
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
