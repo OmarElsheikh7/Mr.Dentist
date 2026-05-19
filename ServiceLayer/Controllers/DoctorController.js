@@ -15,7 +15,7 @@ const createDoctor = async (req, res) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const userData = {
       name: req.body.name,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       password: hashedPassword,
       gender: req.body.gender,
       role: "doctor",
@@ -43,7 +43,7 @@ const updateDoctor = async (req, res) => {
     };
     const userData = {
       name: req.body.name,
-      email: req.body.email,
+      email: req.body.email.toLowerCase(),
       dateofBirth: req.body.dateofBirth,
       gender: req.body.gender,
     };

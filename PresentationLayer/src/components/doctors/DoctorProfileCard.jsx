@@ -13,19 +13,19 @@ const DoctorProfileCard = ({ doctor }) => {
 
   return (
     <div className="profile-card">
-
       {/* Dynamic Avatar Container — Matches Patient Design */}
       <div className="profile-avatar-container">
-        {doctor.profilePicture ? (
-          <img 
-            src={doctor.profilePicture} 
-            alt={`${doctor.name}'s profile`} 
-            className="profile-avatar-img" 
+        {/* Look directly at doctor.pictureUrl */}
+        {doctor?.pictureUrl ? (
+          <img
+            src={doctor.pictureUrl}
+            alt={`${doctor?.name || "Doctor"}'s profile`}
+            className="profile-avatar-img"
           />
         ) : (
           <div className="profile-avatar-initials">
-            {/* Shows first letter of name if no picture exists */}
-            {doctor.name ? doctor.name.charAt(0).toUpperCase() : "?"}
+            {/* Look directly at doctor.name for the initial */}
+            {doctor?.name ? doctor.name.charAt(0).toUpperCase() : "?"}
           </div>
         )}
       </div>
@@ -38,7 +38,6 @@ const DoctorProfileCard = ({ doctor }) => {
 
       {/* All profile detail rows */}
       <div className="profile-details">
-
         <div className="profile-row">
           <span className="profile-label">Email</span>
           <span className="profile-value">{doctor.email}</span>
@@ -65,10 +64,20 @@ const DoctorProfileCard = ({ doctor }) => {
           <span className="profile-label">Shift Timing</span>
           {/* Badge style to make it visually distinct from regular text */}
           <span className="profile-shift-badge">
-            {formatShift(doctor.shiftStart, doctor.shiftEnd)}
+            {(() => {
+              switch (doctor?.shiftID) {
+                case 0:
+                  return "Morning (08:00 - 16:00)";
+                case 1:
+                  return "Afternoon (16:00 - 00:00)";
+                case 2:
+                  return "Night (00:00 - 08:00)";
+                default:
+                  return "Not assigned yet";
+              }
+            })()}
           </span>
         </div>
-
       </div>
     </div>
   );

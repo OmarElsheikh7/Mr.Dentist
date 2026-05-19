@@ -21,7 +21,7 @@ const DoctorProfilePage = () => {
 
   const handleUpdate = async (updatedData) => {
     const result = await updateProfile(updatedData);
-    if (result) {
+    if (result && result.success) {
       setIsEditing(false);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
@@ -46,16 +46,15 @@ const DoctorProfilePage = () => {
     
     setIsUploadingImage(true);
     try {
-      const formData = new FormData();
-      formData.append("profilePicture", selectedImage);
+      // FIX: useDoctor's uploadProfilePicture already creates the FormData.
+      // We pass 'selectedImage' directly instead of wrapping it in FormData again.
+      const result = await uploadProfilePicture(selectedImage);
       
-      const result = await uploadProfilePicture(formData);
-      
-      if (result) {
+      if (result && result.success) {
         setSaveSuccess(true);
         setTimeout(() => setSaveSuccess(false), 3000);
         setSelectedImage(null);
-        getProfileData(); 
+        getProfileData(); // Fetch fresh data to ensure UI syncs perfectly
       }
     } catch (err) {
       console.error("Failed to upload image", err);

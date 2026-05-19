@@ -79,22 +79,32 @@ const { doctor, loading, error, getDashboardData } = useDoctor();
           {/* Shift timing from DOCTOR table */}
           <div className="detail-card">
             <span className="detail-label">Shift Timing</span>
-            <span className="detail-value">{doctor.shiftTiming}</span>
+            <span className="detail-value">
+              {(() => {
+                switch (doctor.shiftID) {
+                  case 0:
+                    return "Morning (08:00 - 16:00)";
+                  case 1:
+                    return "Afternoon (16:00 - 00:00)";
+                  case 2:
+                    return "Night (00:00 - 08:00)";
+                  default:
+                    return "N/A";
+                }
+              })()}
+            </span>
           </div>
-
           {/* Consultation fee from DOCTOR table */}
           <div className="detail-card">
             <span className="detail-label">Consultation Fee</span>
             <span className="detail-value">{doctor.consultationFee} EGP</span>
           </div>
-
-          {/* Branches from WORKS_IN + CLINIC_BRANCH tables */}
-          {doctor.branches.map((branch) => (
-            <div className="detail-card" key={branch.id}>
-              <span className="detail-label">Branch — {branch.city}</span>
-              <span className="detail-value">{branch.address}</span>
-            </div>
-          ))}
+          <div className="detail-card">
+            <span className="detail-label">Branch</span>
+            <span className="detail-value">
+              {doctor.branchId?.address?.toString() || "N/A"}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -107,14 +117,21 @@ const { doctor, loading, error, getDashboardData } = useDoctor();
             <div className="card" key={appt.id}>
               {/* Top row: patient name and status badge */}
               <div className="card-top">
-                <span className="card-title">{appt.patient.user.name}</span>
+                <span className="card-title">
+                  {appt.patient?.user?.name || "Unknown Patient"}
+                </span>
               </div>
 
               {/* Appointment details */}
               <p className="card-detail">
-                 Date: {appt.appointmentDate ? new Date(appt.appointmentDate).toLocaleDateString('en-US', {
-                  year: 'numeric', month: 'short', day: 'numeric'
-                }) : "N/A"}
+                Date:{" "}
+                {appt.appointmentDate
+                  ? new Date(appt.appointmentDate).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : "N/A"}
               </p>
               <p className="card-detail">Branch: {appt.branch.address}</p>
               <p className="card-detail">Fee: {appt.totalCost} EGP</p>
