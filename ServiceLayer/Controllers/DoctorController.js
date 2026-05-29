@@ -1,4 +1,3 @@
-const { startSession } = require("../../DataAccessLayer/Models/User");
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
 const ReviewRepository = require("../../DataAccessLayer/Repositories/ReviewRepository");
 const bcrypt = require("bcrypt");

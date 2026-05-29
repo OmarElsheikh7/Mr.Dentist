@@ -13,8 +13,8 @@ router.post("/Availableslots/:id", protect, authorizeRoles("patient","admin"), A
 
 //Doctor routes
 router.get("/doctor/appointments", protect, authorizeRoles("doctor"), AppointmentController.GetDoctorAppointments);
-router.put("/appointments/:id", protect, authorizeRoles("admin"), AppointmentController.updateAppointment);
-router.delete("/appointments/:id", protect, authorizeRoles("admin"), AppointmentController.deleteAppointment);
+router.put("/:id", protect, authorizeRoles("admin"), AppointmentController.updateAppointment);
+router.delete("/:id", protect, authorizeRoles("admin"), AppointmentController.deleteAppointment);
 
 module.exports = router;
 

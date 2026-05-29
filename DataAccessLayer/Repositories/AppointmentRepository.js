@@ -61,4 +61,6 @@ module.exports = {
   getAppointmentsByPatient,
   getAppointmentsByDoctor,
   getAvailableSlots,
+  updateAppointment,
+  deleteAppointment,
 };

@@ -1,6 +1,7 @@
 const AppointmentRepository = require("../../DataAccessLayer/Repositories/AppointmentRepository");
 const PatientRepository = require("../../DataAccessLayer/Repositories/PatientRepository");
 const DoctorRepository = require("../../DataAccessLayer/Repositories/DoctorRepository");
+const Appointment = require("../../DataAccessLayer/Models/Appointment");
 
 
 
@@ -29,12 +30,26 @@ const updateAppointment = async (req, res) => {
       appointmentDate: req.body.appointmentDate,
       slotTime: req.body.slotTime,
     };
-    const updatedAppointment = await AppointmentRepository.updateAppointment(appointmentId, appointmentData);
-    if (!updatedAppointment) {
+
+    // Fetch the existing appointment to get doctor and shiftId
+    const existingAppointment = await Appointment.findById(appointmentId);
+    if (!existingAppointment) {
       return res.status(404).json({ message: "Appointment not found" });
-    } else {
-      return res.json({ message: "Appointment updated successfully", data: updatedAppointment });
     }
+
+    // Check if the new slot is available for this doctor
+    const availableSlots = await AppointmentRepository.getAvailableSlots(
+      existingAppointment.doctor,
+      appointmentData.appointmentDate,
+      existingAppointment.shiftId
+    );
+
+    if (!availableSlots.includes(appointmentData.slotTime)) {
+      return res.status(400).json({ message: "This slot is already booked" });
+    }
+
+    const updatedAppointment = await AppointmentRepository.updateAppointment(appointmentId, appointmentData);
+    return res.json({ message: "Appointment updated successfully", data: updatedAppointment });
 
   } catch (error) {
     res.status(400).json({ message: error.message });
