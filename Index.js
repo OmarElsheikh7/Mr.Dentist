@@ -33,7 +33,7 @@ const appointmentRoute = require("./ServiceLayer/Routes/AppointmentRoute");
 const clinicBranchRoute = require("./ServiceLayer/Routes/ClinicBranchRoute");
 const errorHandler = require("./ServiceLayer/Middleware/ErrorHandlerMiddleware");
 
-app.use("/api/clinicBranches", clinicBranchRoute);
+app.use("/api/clinic-branches", clinicBranchRoute);
 app.use("/api/appointments", appointmentRoute);
 app.use("/api/patients", patientRoute);
 app.use("/api/reviews", reviewRoute);
